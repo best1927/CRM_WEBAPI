@@ -22,7 +22,7 @@ using DatabaseFactoryManager.Interface;
 
 namespace CRM_Lib
 {
-    class CRM_Controller :  ICRM_Controller, IDbExecutable, IDisposable
+    class CRM_Controller : ICRM_Controller, IDbExecutable, IDisposable
     {
 
         public static Database _DB = null;
@@ -34,8 +34,8 @@ namespace CRM_Lib
 
 
 
-        public static int maxrows =   !string.IsNullOrEmpty(rowtxt) ? Int32.Parse( rowtxt) : 20 ;  
-        
+        public static int maxrows = !string.IsNullOrEmpty(rowtxt) ? Int32.Parse(rowtxt) : 20;
+
 
 
         private static CRM_Controller _instant = new CRM_Controller();
@@ -61,7 +61,7 @@ namespace CRM_Lib
             }
             return _DB;
 
-         
+
         }
 
 
@@ -72,23 +72,12 @@ namespace CRM_Lib
         {
             double ret = 0;
             Database db = GetDB();
-            //IDbConnection pCon = null;
-            //IDbTransaction trn = null;
-            //DbSimplyTransaction simply = (DbSimplyTransaction)Transaction;
-            //if (Transaction != null)
-            //{
-            //    pCon = simply.Connection;
-            //    trn = simply.Transaction;
-            //}
-            //else
-            //{
-            //    pCon = db.CreateConnection();
-            //}
-            ret = db.ExecuteNonQuery( SQLString, Params, Transaction);
+
+            ret = db.ExecuteNonQuery(SQLString, Params, Transaction);
             return ret;
         }
 
-        public decimal  ExecuteScalar(string SQLString, Dictionary<string, object> Params = null, IDbSimplyTransaction Transaction = null)
+        public decimal ExecuteScalar(string SQLString, Dictionary<string, object> Params = null, IDbSimplyTransaction Transaction = null)
         {
             //decimal ret = 0;
             //Database db = GetDB();
@@ -108,8 +97,8 @@ namespace CRM_Lib
             //return ret;
             decimal ret = 0;
             Database db = GetDB();
-          
-            ret = db.ExecuteScalar( SQLString, Params, Transaction);
+
+            ret = db.ExecuteScalar(SQLString, Params, Transaction);
             return ret;
         }
         public int UpdateTable(DataTable dt, string TableName, IDbSimplyTransaction Transaction = null)
@@ -119,8 +108,8 @@ namespace CRM_Lib
             ret = db.UpdateTable(dt, TableName, (DbSimplyTransaction)Transaction);
             return ret;
         }
- 
-        
+
+
         public DataTable DoQuery(string SelectString, Dictionary<string, object> Params = null, IDbSimplyTransaction Transaction = null, int startRecord = -1, int maxRecord = -1)
         {
 
@@ -162,8 +151,8 @@ namespace CRM_Lib
                 if (disposing)
                 {
                     _instant = null;
-                    
-                } 
+
+                }
             }
             this.disposedValue = true;
         }
@@ -322,7 +311,236 @@ namespace CRM_Lib
             return ret;
         }
 
-      
+
+
+        #region "Activity"
+
+        public GuResult<List<CrmActivitiesTag>> GetTagList(string activity, string alias, string userid)
+        {
+            GuResult<List<CrmActivitiesTag>> ret = new GuResult<List<CrmActivitiesTag>>();
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM GENERAL_DESC WHERE GDTYPE = :GDTYPE ORDER BY COND2,GDCODE ");
+            string sqlTags = string.Format("SELECT " + alias + ".TAG_ID ," + alias + ".A_ID ," + alias + ".ACTIVITY_CAT ," + alias + ".ACTIVITY_ID ," + alias + ".TAG_LABEL ," + alias + ".VISIBILE_TYPE ," + alias + ".VISIBILE_CD FROM CRM_ACTIVITIES_TAG " + alias + " WHERE {0} AND ACTIVITY_CAT = '" + activity + "' ", this.GetVisibilityString(alias, userid));
+            try
+            {
+
+                Database database = GetDB();
+                var dt2 = this.DoQuery(sqlTags, null, null, 0, 99999999);
+                ret.result = (List<CrmActivitiesTag>)dt2.GetDTOs<CrmActivitiesTag>();
+                ret.IsComplete = true;
+            }
+            catch (Exception ex)
+            {
+                ret.result = null;
+                ret.IsComplete = false;
+                ret.MsgText = ex.Message;
+                throw ex;
+            }
+            return ret;
+        }
+
+        public int GetActivityId(IDbConnection conn)
+        {
+            int ret = 0;
+            IDbCommand cmdSeq = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("select SEQ_CRM_ACTIVITIES.nextval from dual");
+            cmdSeq = conn.CreateCommand();
+            cmdSeq.CommandText = sb.ToString();
+            object tmp = cmdSeq.ExecuteScalar();
+
+            if (!(tmp is DBNull))
+            {
+                ret = Convert.ToInt32(tmp);
+            }
+            return ret;
+        }
+
+        public int GetMaxLinkSeqId(IDbConnection conn, int aId)
+        {
+            int ret = 0;
+            IDbCommand cmdSeq = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("select max(SEQ) from CRM_ACTIVITIES_LINK WHERE A_ID = " + aId);
+            cmdSeq = conn.CreateCommand();
+            cmdSeq.CommandText = sb.ToString();
+            object tmp = cmdSeq.ExecuteScalar();
+
+            if (!(tmp is DBNull))
+            {
+                ret = Convert.ToInt32(tmp);
+            }
+            return ret;
+        }
+
+
+        public int GetTagId(IDbConnection conn)
+        {
+            int ret = 0;
+            IDbCommand cmdSeq = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("select SEQ_CRM_ACTIVITIES_TAG.nextval from dual");
+            cmdSeq = conn.CreateCommand();
+            cmdSeq.CommandText = sb.ToString();
+            object tmp = cmdSeq.ExecuteScalar();
+
+            if (!(tmp is DBNull))
+            {
+                ret = Convert.ToInt32(tmp);
+            }
+            return ret;
+        }
+        public GuResult<String> InsertAcitvity(IDbConnection conn, IDbTransaction trn, MCrmActivities Obj, string user, string flag)
+        {
+            GuResult<String> ret = new GuResult<string>();
+            int aId;
+            DateTime _d = DateTime.Now;
+            IDbCommand cmdAct = null;
+
+
+            try
+            {
+                using (conn)
+                {
+                    aId = GetActivityId(conn);
+
+                    cmdAct = conn.CreateCommand();
+                    Obj.AId = aId;
+                    Obj.Createuser = user;
+                    Obj.Createdate = _d;
+                    cmdAct = Obj.InsertCommand(conn);
+                    cmdAct.Transaction = trn;
+                    cmdAct.ExecuteNonQuery();
+
+
+
+                    if (Obj.LinkList != null && Obj.LinkList.Count > 0)
+                    {
+
+                        foreach (CrmActivitiesLink l in Obj.LinkList)
+                        {
+                            InsertAcitvityLink(conn, trn, Obj.LinkList, user, "Y", aId);
+                        }
+                    }
+
+                    if (Obj.TagList != null && Obj.TagList.Count > 0)
+                    {
+                        InsertAcitvityTag(conn, trn, Obj.TagList, user, aId);
+
+                    }
+                    ret.result = CRMMessageEnum.MessageEnum.MessageDataResponse.SaveCompleted.ToString();
+                    ret.IsComplete = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (trn != null)
+                {
+                    trn.Rollback();
+                }
+                ret.result = null;
+                ret.IsComplete = false;
+                ret.MsgText = ex.Message;
+                throw ex;
+            }
+
+            return ret;
+        }
+        public GuResult<String> InsertAcitvityLink(IDbConnection conn, IDbTransaction trn, List<CrmActivitiesLink> Obj, string user, string flagNew = "N", int aId = -1)
+        {
+            GuResult<String> ret = new GuResult<string>();
+            IDbCommand cmdActLink = null;
+            DateTime _d = DateTime.Now;
+            int seq = 0;
+
+            cmdActLink = conn.CreateCommand();
+            cmdActLink.Transaction = trn;
+            foreach (CrmActivitiesLink l in Obj)
+            {
+
+                if (aId > -1)
+                {
+                    l.AId = aId;
+                }
+                if (flagNew == "N")
+                {
+                    seq = GetMaxLinkSeqId(conn, Convert.ToInt32(l.AId)) + 1;
+                }
+                else
+                {
+                    seq += 1;
+                }
+
+                l.Seq = seq;
+                l.Createuser = user;
+                l.Createdate = _d;
+                cmdActLink = l.InsertCommand(conn);
+                cmdActLink.ExecuteNonQuery();
+            }
+            ret.IsComplete = true;
+            return ret;
+        }
+
+        public GuResult<String> DeleteAcitvityLink(IDbConnection conn, IDbTransaction trn, List<CrmActivitiesLink> Obj)
+        {
+            GuResult<String> ret = new GuResult<string>();
+            IDbCommand cmdActLink = null;
+            cmdActLink = conn.CreateCommand();
+            cmdActLink.Transaction = trn;
+            foreach (CrmActivitiesLink l in Obj)
+            {
+                cmdActLink = l.DeleteCommand(conn);
+                cmdActLink.ExecuteNonQuery();
+            }
+            ret.IsComplete = true;
+            return ret;
+        }
+
+        public GuResult<String> InsertAcitvityTag(IDbConnection conn, IDbTransaction trn, List<CrmActivitiesTag> Obj, string user, int aId = -1)
+        {
+            GuResult<String> ret = new GuResult<string>();
+            IDbCommand cmdActTag = null;
+            DateTime _d = DateTime.Now;
+
+            cmdActTag = conn.CreateCommand();
+            cmdActTag.Transaction = trn;
+            foreach (CrmActivitiesTag t in Obj)
+            {
+
+                if (aId > -1)
+                {
+                    t.AId = aId;
+                }
+                t.TagId = GetTagId(conn);
+                t.Createuser = user;
+                t.Createdate = _d;
+                cmdActTag = t.InsertCommand(conn);
+                cmdActTag.ExecuteNonQuery();
+            }
+            ret.IsComplete = true;
+            return ret;
+        }
+
+        public GuResult<String> DeleteAcitvityTag(IDbConnection conn, IDbTransaction trn, List<CrmActivitiesTag> Obj)
+        {
+            GuResult<String> ret = new GuResult<string>();
+            IDbCommand cmdActTag = null; 
+            cmdActTag = conn.CreateCommand();
+            cmdActTag.Transaction = trn;
+            foreach (CrmActivitiesTag t in Obj)
+            {
+                cmdActTag = t.DeleteCommand(conn);
+                cmdActTag.ExecuteNonQuery();
+            }
+            ret.IsComplete = true;
+            return ret;
+        }
+
+
+        #endregion
+
+
     }
 
 

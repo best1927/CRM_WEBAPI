@@ -6,6 +6,17 @@ Namespace Model
     <DataContract()>
     Public Class MSearchContacts
         Inherits SsCommon.BaseDto
+        <DataMember> Public Property currRec As Integer
+        <DataMember> Public Property maxRec As Integer
+        <DataMember> Public Property totalRec As Integer
+        <DataMember> Public Property MContactsList As List(Of MContacts)
+        <DataMember> Public Property TagList As List(Of DTO.CrmActivitiesTag)
+
+    End Class
+
+
+    Public Class MContacts
+        Inherits SsCommon.BaseDto
         <DataMember> Public Property ContactId As Integer
         <DataMember> Public Property ContactName As String
         <DataMember> Public Property Email As String

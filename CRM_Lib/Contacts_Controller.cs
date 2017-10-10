@@ -375,53 +375,40 @@ namespace CRM_Lib
             return ret;
         }
 
-        //Public Function GetFactoryByID(id As Integer) As DTO.PgFactory
-
-        //   Dim ret As New DTO.PgFactory
-
-        //   Dim sqlStr As String = "SELECT * FROM PG_FACTORY WHERE FACTORY_ID = :FACTORYID"
-
-        //   Dim param As New Dictionary(Of String, Object)
-        //    param.Add("FACTORYID", id)
-
-        //    Dim dt = DoQuery(sqlStr, Nothing, Nothing, 0, 1)
-        //    If dt IsNot Nothing AndAlso dt.Rows.Count > 0 Then
-        //        Dim tmp = dt.GetDTOs(Of DTO.PgFactory)()
-        //        ret = tmp.FirstOrDefault
-        //    End If
-
-        //    Return ret
-        //End Function
-        public GuResult<List<MSearchContacts>> ContactsSearch(string txtStr, string filter,  string user , string[] tagstr)
-        {
-            GuResult<List<MSearchContacts>> ret = new GuResult<List<MSearchContacts>>();
+      
+        //public GuResult<List<MSearchContacts>> ContactsSearch(string txtStr, string filter,  string user , string[] tagstr)
+        //{
+        //    GuResult<List<MSearchContacts>> ret = new GuResult<List<MSearchContacts>>();
          
-            StringBuilder sb = new StringBuilder();
-            IDbCommand cmd1 = null;
-            sb.Append("SELECT C.CONTACT_ID, C.NAME_LOC, C.NAME_OTH, C.ORGANIZE_ID, O.DESCR_LOC, O.DESCR_OTH FROM CRM_CONTACTS C LEFT OUTER JOIN CRM_ORGANIZATION O ON C.ORGANIZE_ID = O.ORGANIZE_ID LEFT OUTER JOIN CRM_ACTIVITIES_TAG T ON T.ACTIVITY_CAT = 'ACCATCONT' AND T.A_ID = C.CONTACT_ID");
+        //    StringBuilder sb = new StringBuilder();
+        //    IDbCommand cmd1 = null;
+        //    sb.Append("SELECT C.CONTACT_ID, C.NAME_LOC, C.NAME_OTH, C.ORGANIZE_ID, O.DESCR_LOC, O.DESCR_OTH FROM CRM_CONTACTS C LEFT OUTER JOIN CRM_ORGANIZATION O ON C.ORGANIZE_ID = O.ORGANIZE_ID LEFT OUTER JOIN CRM_ACTIVITIES_TAG T ON T.ACTIVITY_CAT = 'ACCATCONT' AND T.A_ID = C.CONTACT_ID");
 
-            try
-            {
-                Database database = CRM_Controller.GetDB();
-                using (IDbConnection conn = database.CreateOpenConnection())
-                {
-                    cmd1.Connection = conn;
-                    cmd1.CommandText = sb.ToString();
-                    cmd1.Parameters.Clear();
+        //    try
+        //    {
+        //        Database database = CRM_Controller.GetDB();
+        //        using (IDbConnection conn = database.CreateOpenConnection())
+        //        {
+        //            cmd1.Connection = conn;
+        //            cmd1.CommandText = sb.ToString();
+        //            cmd1.Parameters.Clear();
 
-                }
-            }
-            catch (Exception ex)
-            {
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                ret.result = null;
-                ret.IsComplete = false;
-                ret.MsgText = ex.Message;
-                throw ex;
-            }
-            return ret;
+        //        ret.result = null;
+        //        ret.IsComplete = false;
+        //        ret.MsgText = ex.Message;
+        //        throw ex;
+        //    }
+        //    return ret;
+        //}
+
+        public GuResult<MSearchContacts> SearchContacts(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string local, string tagstr, long curpage, long maxRec)
+        {
+            throw new NotImplementedException();
         }
-        
-
     }
 }

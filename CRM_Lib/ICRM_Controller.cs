@@ -27,5 +27,12 @@ namespace CRM_Lib
         List<MasErrorMessage> GetMessageList(string lang);
 
 
+        #region "Activity"
+
+        GuResult<List<CrmActivitiesTag>> GetTagList(string activity, string alias, string userid);
+
+
+        #endregion
+
     }
 }

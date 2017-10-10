@@ -137,6 +137,7 @@
     <Compile Include="DTO\MasUserOrgModule.vb" />
     <Compile Include="DTO\MasUserPermission.vb" />
     <Compile Include="DTO\MasUserToken.vb" />
+    <Compile Include="Model\MCrmActivities.vb" />
     <Compile Include="Model\MCrmContacts.vb" />
     <Compile Include="Model\MCrmOrganization.vb" />
     <Compile Include="Model\MGeneralType.vb" />

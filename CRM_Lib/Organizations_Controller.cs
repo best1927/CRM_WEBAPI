@@ -57,7 +57,7 @@ namespace CRM_Lib
 
             string sqlcntstr = String.Format("SELECT COUNT(*) FROM ( {0} )", string.Format(sqlstr, VisibleStr, strfilter));
             string sqlSearchstr = string.Format(sqlstr, VisibleStr, strfilter) + " ORDER BY ORGANIZE_NAME ";
-            string sqlTags = string.Format("SELECT O.TAG_ID ,O.A_ID ,O.ACTIVITY_CAT ,O.ACTIVITY_ID ,O.TAG_LABEL ,O.VISIBILE_TYPE ,O.VISIBILE_CD FROM CRM_ACTIVITIES_TAG O WHERE {0} AND ACTIVITY_CAT = 'ACCATORG' ", VisibleStr);
+            //string sqlTags = string.Format("SELECT O.TAG_ID ,O.A_ID ,O.ACTIVITY_CAT ,O.ACTIVITY_ID ,O.TAG_LABEL ,O.VISIBILE_TYPE ,O.VISIBILE_CD FROM CRM_ACTIVITIES_TAG O WHERE {0} AND ACTIVITY_CAT = 'ACCATORG' ", VisibleStr);
 
             try
             {
@@ -69,8 +69,8 @@ namespace CRM_Lib
                     var dt = crmlib.DoQuery(sqlSearchstr, paramList, trn, (int)curpage, (int)maxRec);
                     ret.result.MOrganizationList = (List<MOrganization>)dt.GetDTOs<MOrganization>();
 
-                    var dt2 = crmlib.DoQuery(sqlTags, null, trn, 0, 99999999);
-                    ret.result.TagList = (List<CrmActivitiesTag>)dt2.GetDTOs<CrmActivitiesTag>();
+
+                    ret.result.TagList = crmlib.GetTagList("ACCATORG","O",userid ).result ;
 
                     foreach (MOrganization d in ret.result.MOrganizationList)
                     {
@@ -108,16 +108,13 @@ namespace CRM_Lib
                                 }
                                 d.tagstr = xx;
                             }
-                        }
-
-
+                        } 
                     }
 
                 }
                 else {
 
-                    var dt2 = crmlib.DoQuery(sqlTags, null, trn, 0, 99999999);
-                    ret.result.TagList = (List<CrmActivitiesTag>)dt2.GetDTOs<CrmActivitiesTag>();
+                    ret.result.TagList = crmlib.GetTagList("ACCATORG", "O", userid).result;
                     ret.MsgText = CRMMessageEnum.MessageEnum.MessageDataResponse.DataDoesNotExisits.ToString(); }
 
                 ret.IsComplete = true;
@@ -184,35 +181,7 @@ namespace CRM_Lib
 
         }
 
-        //Dim ret As New DTO.PgFactory
-
-        //  Dim sqlStr As String = "SELECT * FROM PG_FACTORY WHERE FACTORY_ID = :FACTORYID"
-        //    Dim param As New Dictionary(Of String, Object)
-        //    param.Add("FACTORYID", id)
-
-        //    Dim dt = DoQuery(sqlStr, Nothing, Nothing, 0, 1)
-        //    If dt IsNot Nothing AndAlso dt.Rows.Count > 0 Then
-        //        Dim tmp = dt.GetDTOs(Of DTO.PgFactory)()
-        //        ret = tmp.FirstOrDefault
-        //    End If
-
-        //    Return ret
-
-        //Dim sqlstr As String = _
-        //     "SELECT COUNT(*) From PG_WEEKLY_ORDER PW WHERE PW.FACTORY_ID = :FACTORY_ID AND PW.PERIODYEAR = :PERIODYEAR"
-        //    Dim ret As Decimal = 0
-        //    Dim dt As DataTable = Nothing
-        //    'To Do Init  FOR GEN  DTO PG_WEEKLY_ORDER
-        //    Dim paramList As New Dictionary(Of String, Object)
-
-        //    paramList.Add("PERIODYEAR", periodyear)
-        //    paramList.Add("FACTORY_ID", factoryId)
-        //    Try
-        //        ret = ExecuteScalar(sqlstr, paramList, pgtrn)
-        //    Catch ex As Exception
-        //        Throw ex
-        //    End Try
-
+      
         #region "Private Function"
 
 
