@@ -36,10 +36,12 @@ namespace CRM_Lib
             throw new NotImplementedException();
         }
 
-        public GuResult<MSearchOrganization> SearchOrganization(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string local, string tagstr, Int64 curpage, Int64 maxRec)
+        public GuResult<MSearchOrganization> SearchOrganization(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string local, string tagstr, Int64 curpage )
         {
             GuResult<MSearchOrganization> ret = new GuResult<MSearchOrganization>();
             ret.result = new MSearchOrganization();
+
+         
             ret.result.MOrganizationList = new List<MOrganization>();
             ret.result.TagList = new List<CrmActivitiesTag>();
             IDbSimplyTransaction trn = null;
@@ -63,10 +65,10 @@ namespace CRM_Lib
             {
                 ret.result.totalRec = (int)crmlib.ExecuteScalar(sqlcntstr, paramList, trn);
                 ret.result.currRec = (int)curpage;
-                ret.result.maxRec = (int)maxRec;
+                ret.result.maxRec = CRM_Controller.maxrows;
                 if (ret.result.totalRec > 0)
                 {
-                    var dt = crmlib.DoQuery(sqlSearchstr, paramList, trn, (int)curpage, (int)maxRec);
+                    var dt = crmlib.DoQuery(sqlSearchstr, paramList, trn, (int)curpage, CRM_Controller.maxrows);
                     ret.result.MOrganizationList = (List<MOrganization>)dt.GetDTOs<MOrganization>();
 
 

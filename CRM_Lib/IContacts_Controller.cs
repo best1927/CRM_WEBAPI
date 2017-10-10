@@ -17,7 +17,7 @@ namespace CRM_Lib
 
         GuResult<String> DeleteContacts(MCrmContacts Obj, string user, string flag); 
 
-        GuResult<MSearchContacts > SearchContacts(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string local, string tagstr, Int64 curpage, Int64 maxRec);
+        GuResult<MSearchContacts > SearchContacts(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string local, string tagstr, Int64 curpage );
 
 
     }

@@ -406,7 +406,7 @@ namespace CRM_Lib
         //    return ret;
         //}
 
-        public GuResult<MSearchContacts> SearchContacts(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string local, string tagstr, long curpage, long maxRec)
+        public GuResult<MSearchContacts> SearchContacts(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string local, string tagstr, Int64  curpage )
         {
             throw new NotImplementedException();
         }

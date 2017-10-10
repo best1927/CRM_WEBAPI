@@ -21,7 +21,7 @@ namespace CRM_Lib
         GuResult<String> DeleteOrganization(MCrmOrganization Obj, string user, string flag);
 
 
-        GuResult<MSearchOrganization> SearchOrganization(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string local, string tagstr, Int64 curpage, Int64 maxRec);
+        GuResult<MSearchOrganization> SearchOrganization(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string local, string tagstr, Int64 curpage );
 
 
        

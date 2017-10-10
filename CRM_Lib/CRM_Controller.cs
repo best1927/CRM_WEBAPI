@@ -34,8 +34,7 @@ namespace CRM_Lib
 
 
 
-        public static int maxrows = !string.IsNullOrEmpty(rowtxt) ? Int32.Parse(rowtxt) : 20;
-
+        public static int maxrows = !string.IsNullOrEmpty(rowtxt) ? Int32.Parse(rowtxt) : 20; 
 
 
         private static CRM_Controller _instant = new CRM_Controller();
