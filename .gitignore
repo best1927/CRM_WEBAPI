@@ -1,0 +1,18 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# Except Folder (dll need compile from sourcecode)
+/CRM_Lib/bin
+/CRMDTOLib/bin
+/CRMMessageEnum/bin
+
+/CRM_Lib/obj
+/CRMDTOLib/obj
+/CRMMessageEnum/obj
+
+# Except ExtensionType
+*.suo
+*.exclude
+
+# Except dll (dll need compile from sourcecode)
+
+/SmartCRMWeb/Bin/CRM*

@@ -1,0 +1,133 @@
+﻿.clear {
+    clear: both;
+}
+
+input, select {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.form-wrapper {
+    width: 700px;
+    display: inline-block;
+    padding-right: 20px;
+    vertical-align: top;
+}
+
+    .form-wrapper.last {
+        width: 330px;
+        padding-right: 0;
+    }
+
+    .form-wrapper fieldset {
+        margin-bottom: 20px;
+    }
+
+    .form-wrapper.one-column {
+        width: 230px;
+    }
+
+        .form-wrapper.one-column.last {
+            width: 210px;
+            padding-right: 0;
+        }
+
+.form td {
+    padding: 3px 5px;
+    vertical-align: top;
+}
+
+    .form td:first-child {
+        width: 120px;
+    }
+
+.form input[type=text],
+.form input[type=password],
+.form textarea,
+.form select {
+    width: 200px;
+    padding: 2px;
+    border: 1px solid #ccc;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+
+.form .required {
+    background-color: #fdeada;
+}
+
+.form input[disabled] {
+    background-color: #eee;
+    border: 1px solid #ccc;
+}
+
+.form input:focus {
+    border: 1px solid #3c8dbc !important;
+}
+
+.form input.money[type=text]{text-align:right;width:100px}
+
+.form .input-group-addon {padding:2px 8px}
+
+.form .input-group input[type=text],
+.form .input-group input[type=password],
+.form .input-group select {width:170px}
+
+.form .input-group .btn {padding:2px 8px}
+
+.form .input-group .icheckbox_minimal,
+.form .input-group .iradio_minimal {margin:0 -3px 0 -2px}
+
+.form .icheckbox_minimal,
+.form .iradio_minimal {margin:0 5px}
+
+.form.wide-label td:first-child {
+    width: 150px;
+}
+
+.form.wide-label input[type=text],
+.form.wide-label textarea,
+.form.wide-label select {
+    width: 170px;
+}
+
+.form.wide-label .input-group input[type=text],
+.form.wide-label .input-group input[type=password],
+.form.wide-label .input-group textarea,
+.form.wide-label .input-group select {
+    width: 140px;
+}
+
+.form textarea.wide {
+    width: 320px;
+}
+
+.filter_column input[type=text],
+.filterColumn .select_filter {
+    font-weight: normal;
+}
+
+.form-wrapper.wide, 
+.form-wrapper.wide .form {
+    width: 100%;
+}
+
+.form-wrapper.wide .form td:first-child {
+    width: 150px;
+}
+
+.form-wrapper.wide .form input[type=text],
+.form-wrapper.wide .form input[type=password],
+.form-wrapper.wide .form textarea,
+.form-wrapper.wide .form select {
+    width: 100%;
+    min-width: 120px;
+}
+
+.form-wrapper.wide .form input[type=text].money {
+    width: 100px;
+}
+
+.form-wrapper.wide .form.wide-label td:first-child {
+    width: 220px;
+}

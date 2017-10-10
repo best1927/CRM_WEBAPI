@@ -1,0 +1,372 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="master_Site" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <%: System.Web.Optimization.Styles.Render("~/Content/css") %>
+            <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <%--<link href="../plugins/datetimepicker-master/jquery.datetimepicker.css" rel="stylesheet" />--%>
+    <link href="../Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+     <link href="../plugins/iCheck/square/blue.css" rel="stylesheet" />
+
+<%--    <link href="../dist/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="../dist/css/ionicons.min.css" rel="stylesheet" />
+    <link href="../dist/css/AdminLTE.min.css" rel="stylesheet" />
+    <link href="../dist/css/form-wrapper.css" rel="stylesheet" />
+
+    <link href="../dist/css/skins/skin-blue-light.css" rel="stylesheet" />
+    <link href="../plugins/datetimepicker-master/jquery.datetimepicker.css" rel="stylesheet" />
+    <!-- iCheck -->
+    <link href="../plugins/iCheck/square/blue.css" rel="stylesheet" />
+    <link href="../plugins/DataTables-1.10.9/media/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="../plugins/waitMe/waitMe.min.css" rel="stylesheet" />
+    <link href="../plugins/sweet-alert/sweet-alert.css" rel="stylesheet" />
+
+    <link href="../Content/custom.css" rel="stylesheet" />--%>
+
+    <%: System.Web.Optimization.Scripts.Render("~/bundles/modernizr") %>
+    <%: System.Web.Optimization.Scripts.Render("~/bundles/jquery") %>
+    <%: System.Web.Optimization.Scripts.Render("~/bundles/moment-with-locales") %>
+    <%: System.Web.Optimization.Scripts.Render("~/bundles/bootstrap") %>
+    <%: System.Web.Optimization.Scripts.Render("~/bundles/app") %>
+    <%: System.Web.Optimization.Scripts.Render("~/bundles/jquery-ui") %>
+    <%: System.Web.Optimization.Scripts.Render("~/bundles/autonumeric") %>
+    <%: System.Web.Optimization.Scripts.Render("~/bundles/custom") %>
+    <%: System.Web.Optimization.Scripts.Render("~/bundles/plugins") %>
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+        <title><%: Page.Title %></title>
+    </asp:ContentPlaceHolder>
+
+    <style>
+        .navbar-nav > .user-menu > .dropdown-menu {
+            width: 200px;
+        }
+
+        /*.bg-green-min {
+            background-color: #c6ecc6;
+        }*/
+    </style>
+
+    <script>
+    
+        $(document).ready(function () {
+            $.sessionTimeout({
+                message: 'Your session will be locked in 5 minute.',
+                keepAliveUrl: 'KeepSessionAlive.ashx',
+                logoutUrl: 'LoginPage.aspx',
+                redirUrl: 'SessionExpired.aspx',
+                warnAfter: 1000000,
+                redirAfter: 1500000
+            });
+
+        });
+
+        function callService(url, type, jData, callBack) {
+            $.ajax({
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                type: type,
+                url: url,
+                data: jData,
+                success: function (results) {
+                    callBack(results);
+                },
+                error: function (error) {
+                    if (error.responseJSON == undefined) {
+                        console.log(error.statusText);
+                    }
+                    else {
+                        sweetAlert("Error...", error.responseJSON.Message, "error");
+                    }
+                }
+            });
+        }
+
+        function validate(tagValidate) {
+            var valid = true;
+            $.each(tagValidate, function (i, txtTag) {
+                if (_.isEmpty($(txtTag).val())) {
+                    $(txtTag).closest(".form-group").addClass("has-error");
+                    valid = false
+                } else {
+                    $(txtTag).closest(".form-group").removeClass("has-error");
+                }
+            });
+            return valid;
+        }
+
+        
+    </script>
+</head>
+<body class="skin-blue">
+    <form id="form1" runat="server">
+        <div class="wrapper">
+            <!-- Main Header -->
+            <header class="main-header">
+                <!-- Logo -->
+                <a class="logo"><b>
+                    <%--<img src="app_themes/logo/cpfit_32.png" alt="" />--%>
+                    <asp:Label ID="lblBrand" runat="server" Text="lblBrand"></asp:Label></b>
+                    <%--<small>Internal</small>--%>
+                </a>
+                <!-- Header Navbar -->
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <!-- Sidebar toggle button-->
+                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                        <span class="sr-only">Toggle navigation</span>
+                    </a>
+                    <!-- Navbar Right Menu -->
+                    <div class="navbar-custom-menu">
+                        <ul class="nav navbar-nav">
+
+                            <!-- User Account Menu -->
+                            <li class="dropdown user user-menu">
+                                <!-- Menu Toggle Button -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <!-- The user image in the navbar-->
+                                    <img src="dist/img/avatar_blank.png" class="user-image" alt="User Image" />
+                                    <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                                    <span class="hidden-xs">
+                                        <asp:Label ID="lblUserIdTopBar" runat="server" Text=""></asp:Label>
+
+                                    </span>
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    <!-- The user image in the menu -->
+                                    <%--             <li class="user-header">
+                                        <img src="dist/img/avatar_blank.png" class="img-circle" alt="User Image" />
+                                        <p>
+                                            <asp:Label ID="lblUserName" runat="server" Text=""></asp:Label>
+
+                                        </p>
+                                    </li>--%>
+                                    <!-- Menu Body -->
+                                    <li class="user-body">
+                                        <div class="col-xs-12 text-center">
+                                            <asp:Label ID="lblLastRefresh" runat="server" Text=""></asp:Label>
+                                        </div>
+                                        <div class="col-xs-12 text-center">
+                                            <a href="LoginPage.aspx" class="btn btn-default btn-flat" onclick="deleteAllTempTable();">Sign out</a>
+                                        </div>
+                                    </li>
+                                    <!-- Menu Footer-->
+                                    <%--                                    <li class="user-footer">
+                                        <div class="pull-left">
+                                            <a href="ModuleSelectionPage.aspx" class="btn btn-default btn-flat">Change Module</a>
+                                        </div>
+                                        <div class="pull-right">
+                                            <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                        </div>
+                                    </li>--%>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+            <!-- Left side column. contains the logo and sidebar -->
+            <aside class="main-sidebar">
+
+                <!-- sidebar: style can be found in sidebar.less -->
+                <section class="sidebar">
+                    <!-- Sidebar user panel (optional) -->
+                    <div class="user-panel">
+                        <div class="pull-left image">
+                            <img src="dist/img/avatar_blank.png" class="img-circle" alt="User Image" />
+                        </div>
+                        <div class="pull-left info">
+                            <p>
+                                <asp:Label ID="lblUserId" runat="server" Text=""></asp:Label>
+                            </p>
+                            <!-- Status -->
+                            <asp:Label ID="lblUserGroup" runat="server" Text=""></asp:Label>
+                        </div>
+                    </div>
+
+                    <!-- search form (Optional) -->
+                    <%--                    <div class="sidebar-form">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="Search..." />
+                            <span class="input-group-btn">
+                                <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </div>--%>
+                    <!-- /.search form -->
+
+
+
+                    <!-- Sidebar Menu -->
+                    <ul class="sidebar-menu" id="sidebarMenu" runat="server">
+
+                        <!-- Optionally, you can add icons to the links -->
+                        <li><a href="TraceObject.aspx"><span><i class="ion ion-cube"></i>Trace Object</span></a></li>
+                        <li><a href="TraceMain.aspx"><span><i class="ion ion-link"></i>Trace Main</span></a></li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="ion ion-person"></i><span>Authentication</span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="MaintainOrg.aspx"><i class="ion ion-home"></i>Organization</a></li>
+                                <li><a href="MaintainUser.aspx"><i class="ion ion-person-add"></i>User</a></li>
+                            </ul>
+                        </li>
+                        <%--<li><a href="TraceConfig.aspx"><span><i class="ion ion-settings"></i>Trace Config</span></a></li>--%>
+                        <li class="treeview active">
+                            <a href="#">
+                                <i class="fa fa-link"></i><span>Trace Process</span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <%--<li><a href="TraceProcess.aspx"><i class="fa fa-circle-o"></i>Invoice</a></li>--%>
+                                <asp:PlaceHolder ID="treemenu" runat="server"></asp:PlaceHolder>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- /.sidebar-menu -->
+                </section>
+                <!-- /.sidebar -->
+            </aside>
+
+            <%--            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>Page Header
+           
+                    <small>Optional description</small>
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i>Level</a></li>
+                        <li class="active">Here</li>
+                    </ol>
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <i class="fa fa-adjust"></i>
+                            <h3 class="box-title">Input</h3>
+                            <div class="box-tools pull-right">
+                                <div class="has-feedback">
+                                    <input type="text" class="form-control input-sm" placeholder="Search..." />
+                                    <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                </div>
+                            </div>
+                            <!-- /.box-tools -->
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="form-group has-error">
+                                <label for="exampleInputEmail1">Email address</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </section>
+                <!-- /.content -->
+            </div>
+            <!-- /.content-wrapper -->--%>
+
+            <div class="content-wrapper bg-green-min">
+                <!-- Content Header (Page header) -->
+                <%--                <section class="content-header">
+                    <h1>
+                        <asp:Label ID="lblPageHeader" runat="server" Text=""></asp:Label>
+                        <small>
+                            <asp:Label ID="lblOptionalDescrition" runat="server" Text=""></asp:Label></small>
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i>Level</a></li>
+                        <li class="active">Here</li>
+                    </ol>
+                </section>--%>
+                <section class="content">
+                    <asp:ContentPlaceHolder ID="ContentBody" runat="server">
+                    </asp:ContentPlaceHolder>
+                </section>
+            </div>
+            <%--            <footer class="main-footer">
+                <!-- To the right -->
+                <div class="pull-right hidden-xs">
+                    Version 2.0
+       
+                </div>
+                <!-- Default to the left -->
+                <strong>Copyright &copy; 2015 <a href="#">Company</a>.</strong> All rights reserved.
+     
+            </footer>--%>
+        </div>
+
+        <%--        <div class="modal fade" id="logout_popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div style="width: 100%; height: 100%; margin: 0px; padding: 0px">
+                            <div style="width: 25%; margin: 0px; padding: 0px; float: left;">
+                                <i class="fa fa-warning" style="font-size: 140px; color: #da4f49"></i>
+                            </div>
+                            <div style="width: 70%; margin: 0px; padding: 0px; float: right; padding-top: 10px; padding-left: 3%;">
+                                <h4>Your session is about to expire!</h4>
+                                <p style="font-size: 15px;">You will be logged out in <span id="timer" style="display: inline; font-size: 30px; font-style: bold">10</span> seconds.</p>
+                                <p style="font-size: 15px;">Do you want to stay signed in?</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div style="margin-left: 30%; margin-bottom: 20px; margin-top: 20px;">
+                        <a href="javascript:;" onclick="resetTimer()" class="btn btn-primary" aria-hidden="true">Yes, Keep me signed in</a>
+                        <a href="#" class="btn btn-danger" aria-hidden="true">No, Sign me out</a>
+                    </div>
+                </div>
+            </div>
+        </div>--%>
+    </form>
+</body>
+<script type="text/javascript">
+   
+    function run_waitMe(effect) {
+        $('body').waitMe({
+            effect: 'bounce',
+            text: 'Please waiting...',
+            bg: 'rgba(255,255,255,0.7)',
+            color: '#000'
+        });
+    }
+    $(document).ajaxStart(function (event, xhr, settings) {
+        run_waitMe();
+    }).ajaxStop(function (event, xhr, settings) {
+        $('body').waitMe('hide');
+    }).ajaxComplete(
+   function (event, xhr, settings) {
+       //if (xhr.status == 401) {
+       //    window.location.href = "/Account/LogOn";
+       //}
+   });
+
+</script>
+</html>

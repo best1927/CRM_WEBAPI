@@ -1,0 +1,320 @@
+﻿/*@import url(http://fonts.googleapis.com/css?family=Droid+Sans+Mono);
+
+html, body
+{
+    height: 100%;
+    font-family: 'Droid Sans Mono', sans-serif;
+}*/
+
+.navbar-brand
+{
+    font-size: xx-large;
+}
+
+
+
+.invalid-lable
+{
+    font-size: 0.9em;
+    white-space: pre-wrap;
+    line-height: 2.0em;
+}
+
+#applications
+{
+    list-style-type: none; /*background-color: #282b2e;*/
+}
+
+    #applications li
+    {
+        width: 192px;
+        margin: 20px 0 0 35px;
+        float: left;
+        text-align: center;
+        /*font-family: "Helvetica Neue",sans-serif;*/
+        line-height: 17px;
+        color: #686f74;
+        /*height: 150px;*/
+        overflow: hidden;
+    }
+
+        #applications li i, #applications li strong
+        {
+            display: block;
+        }
+
+        #applications li strong
+        {
+            text-shadow: rgba(255,255,255,0.85) 0 0 3px;
+        }
+
+        #applications li span
+        {
+            color: #686f74;
+            font-size: smaller;
+        }
+
+        #applications li a
+        {
+            text-decoration: none;
+        }
+
+/*#applications li a i.fa
+                    {
+                        color: #46c5ec;
+                    }*/
+
+
+/*Custom Style Logout Button */
+.btn-logout:hover
+{
+    color: #fff !important;
+    background-color: #d9534f !important;
+    border-color: #d43f3a !important;
+}
+
+#rdoGroupUser
+{
+    margin-left: -10px;
+    float: left;
+}
+
+input[type="radio"]
+{
+    margin: 0px 5px 0px 10px;
+}
+
+.divWaiting
+{
+    position: absolute;
+    background-color: #FAFAFA;
+    z-index: 2147483647 !important;
+    opacity: 0.8;
+    overflow: hidden;
+    text-align: center;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    padding-top: 20%;
+}
+/*Custom Boostrap Style*/
+.page-header
+{
+    margin: 10px 0 10px !important;
+}
+
+/*Search Container*/
+.c-search > .form-control
+{
+    border-radius: 0px;
+    border-width: 0px;
+    border-bottom-width: 1px;
+    /*font-size: 1.3em;*/
+    padding: 12px 12px;
+    height: 34px;
+    outline: none !important;
+}
+
+    .c-search > .form-control:focus
+    {
+        outline: 0px !important;
+        -webkit-appearance: none;
+        box-shadow: none;
+    }
+
+.c-search > .input-group-btn .btn
+{
+    border-radius: 0px;
+    border-width: 0px;
+    border-left-width: 1px;
+    border-bottom-width: 1px;
+    height: 34px;
+}
+
+/*Goto Container*/
+.c-gotopage > .form-control
+{
+    border-radius: 0px;
+    border-width: 0px;
+    border-bottom-width: 1px;
+    /*font-size: 1.3em;*/
+    padding: 12px 12px;
+    height: 34px;
+    outline: none !important;
+}
+
+    .c-gotopage > .form-control:focus
+    {
+        outline: 0px !important;
+        -webkit-appearance: none;
+        box-shadow: none;
+    }
+
+.c-gotopage > .input-group-btn .btn
+{
+    border-radius: 0px;
+    border-width: 0px;
+    border-left-width: 1px;
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+    height: 34px;
+}
+
+.c-list
+{
+    padding: 0px;
+    /*min-height: 44px;*/
+}
+
+.title
+{
+    display: inline-block;
+    /*font-size: 1.3em;*/
+    padding: 5px 15px;
+}
+
+ul.c-controls
+{
+    list-style: none;
+    margin: 0px;
+    /* min-height: 44px; */
+    font-size: 0.6em;
+}
+
+    ul.c-controls li
+    {
+        margin-top: 8px;
+        float: left;
+    }
+
+        ul.c-controls li a
+        {
+            font-size: 1.7em;
+            padding: 11px 10px 6px;
+        }
+
+            ul.c-controls li a i
+            {
+                min-width: 24px;
+                text-align: center;
+            }
+
+            ul.c-controls li a:hover
+            {
+                background-color: rgba(51, 51, 51, 0.2);
+            }
+
+.c-toggle
+{
+    font-size: 1.7em;
+}
+
+.name
+{
+    font-size: 1.7em;
+    font-weight: 700;
+}
+
+.c-info
+{
+    padding: 5px 10px;
+    font-size: 1.25em;
+}
+
+/*Grid Paging Style*/
+.grid-paging
+{
+    padding: 2px;
+    margin: 2% auto;
+}
+
+    .grid-paging a
+    {
+        color: #fff;
+        background-color: #666;
+        border-color: #333;
+        display: inline-block;
+        margin-bottom: 0;
+        font-weight: 400;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        background-image: none;
+        border: 1px solid transparent;
+        white-space: nowrap;
+        padding: 6px 12px;
+        margin: 0 5px;
+        text-decoration: none;
+        border-radius: 4px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+        .grid-paging a:hover
+        {
+            color: #fff;
+            background-color: #333;
+            border-color: #333;
+        }
+
+    .grid-paging span
+    {
+        display: inline-block;
+        margin-bottom: 0;
+        font-weight: 400;
+        text-align: center;
+        vertical-align: middle;
+        background-image: none;
+        border: 1px solid transparent;
+        white-space: nowrap;
+        padding: 6px 12px;
+        margin: 0 5px;
+        text-decoration: none;
+        border-radius: 4px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .vertical-center
+        {
+            min-height: 100%; /* Fallback for vh unit */
+            min-height: 100vh; /* You might also want to use
+                        'height' property instead.
+                        
+                        Note that for percentage values of
+                        'height' or 'min-height' properties,
+                        the 'height' of the parent element
+                        should be specified explicitly.
+  
+                        In this case the parent of '.vertical-center'
+                        is the <body> element */
+            /* Make it a flex container */
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            /* Align the bootstrap's container vertically */
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -moz-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            /* In legacy web browsers such as Firefox 9
+     we need to specify the width of the flex container */
+            width: 100%;
+            /* Also 'margin: 0 auto' doesn't have any effect on flex items in such web browsers
+     hence the bootstrap's container won't be aligned to the center anymore.
+  
+     Therefore, we should use the following declarations to get it centered again */
+            -webkit-box-pack: center;
+            -moz-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+        }
