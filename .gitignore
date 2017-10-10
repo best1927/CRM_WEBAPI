@@ -16,3 +16,4 @@
 # Except dll (dll need compile from sourcecode)
 
 /SmartCRMWeb/Bin/CRM*
+*.user
