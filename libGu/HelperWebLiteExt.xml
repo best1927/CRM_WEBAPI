@@ -1,0 +1,48 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+HelperWebLiteExt
+</name>
+</assembly>
+<members>
+<member name="M:HelperWebLiteExt.BaseDtoExt.TableMap(System.Type,System.String)">
+	<summary>
+ extractable using GetTableNameExt
+ </summary>
+	<param name="dto"></param>
+	<param name="table"></param>
+	<remarks></remarks>
+</member><member name="M:HelperWebLiteExt.BaseDtoExt.GetTableNameExt(SsCommon.BaseDto)">
+	<summary>
+ support table mapping
+ </summary>
+	<param name="obj"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HelperWebLiteExt.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:HelperWebLiteExt.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:HelperWebLiteExt.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:HelperWebLiteExt.HelperLiteExt.UpdateRows(Database,System.Data.IDbConnection,System.Collections.Generic.IEnumerable{SsCommon.BaseDto},System.Data.IDbTransaction,System.Int32)">
+	<summary>
+ Insert/Update/Delete item in batches (according to item's EntityState)
+ </summary>
+	<param name="con"></param>
+	<param name="itemList"></param>
+	<param name="trn"></param>
+	<param name="UpdateBatchSize"></param>
+	<returns>total number of inserted/updated/deleted rows</returns>
+	<remarks>Unchanged items are ignored</remarks>
+</member>
+</members>
+</doc>

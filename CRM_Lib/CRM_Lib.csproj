@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CRM_Lib</RootNamespace>
     <AssemblyName>CRM_Lib</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,39 +25,38 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\libCRM\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CRMDtoLib">
-      <HintPath>..\CRMDtoLib\bin\Debug\CRMDtoLib.dll</HintPath>
+      <HintPath>..\libCRM\CRMDtoLib.dll</HintPath>
     </Reference>
     <Reference Include="CRMMessageEnum">
-      <HintPath>..\CRMMessageEnum\bin\Debug\CRMMessageEnum.dll</HintPath>
+      <HintPath>..\libCRM\CRMMessageEnum.dll</HintPath>
     </Reference>
     <Reference Include="DatabaseFactoryManager">
-      <HintPath>..\..\lib\DatabaseFactoryManager.dll</HintPath>
+      <HintPath>..\libGu\DatabaseFactoryManager.dll</HintPath>
     </Reference>
     <Reference Include="GuCommon">
-      <HintPath>..\..\lib\GuCommon.dll</HintPath>
+      <HintPath>..\libGu\GuCommon.dll</HintPath>
     </Reference>
     <Reference Include="GuMessage">
-      <HintPath>..\..\lib\GuMessage.dll</HintPath>
+      <HintPath>..\libGu\GuMessage.dll</HintPath>
     </Reference>
     <Reference Include="GuMessageEnum">
-      <HintPath>..\..\lib\GuMessageEnum.dll</HintPath>
+      <HintPath>..\libGu\GuMessageEnum.dll</HintPath>
     </Reference>
     <Reference Include="HelperWebLiteExt">
-      <HintPath>..\..\lib\HelperWebLiteExt.dll</HintPath>
+      <HintPath>..\libGu\HelperWebLiteExt.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\libGu\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SsCommonWeb">
-      <HintPath>..\..\lib\SsCommonWeb.dll</HintPath>
+      <HintPath>..\libGu\SsCommonWeb.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
