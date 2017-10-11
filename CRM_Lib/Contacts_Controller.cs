@@ -410,5 +410,15 @@ namespace CRM_Lib
         {
             throw new NotImplementedException();
         }
+
+        #region "Activities"
+
+        #region "Find ActivitiesList" 
+        #endregion
+
+        #region "Find By ActivitiesList Id"
+        #endregion
+
+        #endregion
     }
 }

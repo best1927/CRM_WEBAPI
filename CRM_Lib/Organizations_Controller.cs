@@ -134,6 +134,20 @@ namespace CRM_Lib
         }
 
 
+        public GuResult<MOrganization> Organization_FindByCode(int OrdId) {
+            GuResult<MOrganization> ret = new GuResult<MOrganization>();
+
+
+            return ret;
+        }
+
+
+
+
+
+        #region "Private Function"
+
+
         private string GetStringFilter(string Alphabetfilter, string Combofilter, string txtFilter, string tagstr, ref Dictionary<string, object> paramList)
         {
             string strfilter = string.Empty;
@@ -182,9 +196,6 @@ namespace CRM_Lib
             return strfilter;
 
         }
-
-      
-        #region "Private Function"
 
 
 

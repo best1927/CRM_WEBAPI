@@ -306,7 +306,7 @@ namespace CRM_Lib
             {
                 alias += ".";
             }
-            ret = "(" + alias + "VISIBILE_TYPE = 'ALL' OR LOWER(" + alias + "CREATEUSER) = '%" + userid.ToLower() + "%' OR LOWER(" + alias + "VISIBILE_CD) LIKE '%" + userid.ToLower() + ";%' OR EXISTS(SELECT 1 FROM CRM_MAS_TEAM TE WHERE LOWER(TE.TEAM_ID) = LOWER(" + alias + "VISIBILE_CD) AND LOWER(TE.USER_ID) = '" + userid.ToLower() + "') )";
+            ret = " (" + alias + "VISIBILE_TYPE = 'ALL' OR LOWER(" + alias + "CREATEUSER) = '%" + userid.ToLower() + "%' OR LOWER(" + alias + "VISIBILE_CD) LIKE '%" + userid.ToLower() + ";%' OR EXISTS(SELECT 1 FROM CRM_MAS_TEAM TE WHERE LOWER(TE.TEAM_ID) = LOWER(" + alias + "VISIBILE_CD) AND LOWER(TE.USER_ID) = '" + userid.ToLower() + "') )";
             return ret;
         }
 
@@ -314,31 +314,8 @@ namespace CRM_Lib
 
         #region "Activity"
 
-        public GuResult<List<CrmActivitiesTag>> GetTagList(string activity, string alias, string userid)
-        {
-            GuResult<List<CrmActivitiesTag>> ret = new GuResult<List<CrmActivitiesTag>>();
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT * FROM GENERAL_DESC WHERE GDTYPE = :GDTYPE ORDER BY COND2,GDCODE ");
-            string sqlTags = string.Format("SELECT " + alias + ".TAG_ID ," + alias + ".A_ID ," + alias + ".ACTIVITY_CAT ," + alias + ".ACTIVITY_ID ," + alias + ".TAG_LABEL ," + alias + ".VISIBILE_TYPE ," + alias + ".VISIBILE_CD FROM CRM_ACTIVITIES_TAG " + alias + " WHERE {0} AND ACTIVITY_CAT = '" + activity + "' ", this.GetVisibilityString(alias, userid));
-            try
-            {
-
-                Database database = GetDB();
-                var dt2 = this.DoQuery(sqlTags, null, null, 0, 99999999);
-                ret.result = (List<CrmActivitiesTag>)dt2.GetDTOs<CrmActivitiesTag>();
-                ret.IsComplete = true;
-            }
-            catch (Exception ex)
-            {
-                ret.result = null;
-                ret.IsComplete = false;
-                ret.MsgText = ex.Message;
-                throw ex;
-            }
-            return ret;
-        }
-
+        #region "Add Activity"
         public int GetActivityId(IDbConnection conn)
         {
             int ret = 0;
@@ -372,8 +349,6 @@ namespace CRM_Lib
             }
             return ret;
         }
-
-
         public int GetTagId(IDbConnection conn)
         {
             int ret = 0;
@@ -524,7 +499,7 @@ namespace CRM_Lib
         public GuResult<String> DeleteAcitvityTag(IDbConnection conn, IDbTransaction trn, List<CrmActivitiesTag> Obj)
         {
             GuResult<String> ret = new GuResult<string>();
-            IDbCommand cmdActTag = null; 
+            IDbCommand cmdActTag = null;
             cmdActTag = conn.CreateCommand();
             cmdActTag.Transaction = trn;
             foreach (CrmActivitiesTag t in Obj)
@@ -536,8 +511,42 @@ namespace CRM_Lib
             return ret;
         }
 
+        #endregion
+        public GuResult<List<CrmActivitiesTag>> GetTagList(string activity, string alias, string userid)
+        {
+            GuResult<List<CrmActivitiesTag>> ret = new GuResult<List<CrmActivitiesTag>>();
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM GENERAL_DESC WHERE GDTYPE = :GDTYPE ORDER BY COND2,GDCODE ");
+            string sqlTags = string.Format("SELECT " + alias + ".TAG_ID ," + alias + ".A_ID ," + alias + ".ACTIVITY_CAT ," + alias + ".ACTIVITY_ID ," + alias + ".TAG_LABEL ," + alias + ".VISIBILE_TYPE ," + alias + ".VISIBILE_CD FROM CRM_ACTIVITIES_TAG " + alias + " WHERE {0} AND ACTIVITY_CAT = '" + activity + "' ", this.GetVisibilityString(alias, userid));
+            try
+            {
+
+                Database database = GetDB();
+                var dt2 = this.DoQuery(sqlTags, null, null, 0, 99999999);
+                ret.result = (List<CrmActivitiesTag>)dt2.GetDTOs<CrmActivitiesTag>();
+                ret.IsComplete = true;
+            }
+            catch (Exception ex)
+            {
+                ret.result = null;
+                ret.IsComplete = false;
+                ret.MsgText = ex.Message;
+                throw ex;
+            }
+            return ret;
+        }
+
+        #region "Find ActivitiesList"
+        
+        #endregion
+
+        #region "Find By ActivitiesList Id"
 
         #endregion
+
+
+
 
 
     }
