@@ -68,16 +68,16 @@ Private _OrganizeId As Nullable(of Decimal)
 			End Set
 		End Property
 
-Private _ActivityCat As String
-		<DataMember(),DataField("ACTIVITY_CAT")> _
-		Public Property ActivityCat() As String
+Private _Programcode As String
+		<DataMember(),DataField("PROGRAMCODE")> _
+		Public Property Programcode() As String
 			Get
-				Return Me._ActivityCat
+				Return Me._Programcode
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.ActivityCat, value) <> true) Then				    
-						Me._ActivityCat = value
-						OnPropertyChanged("ActivityCat")
+					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
+						Me._Programcode = value
+						OnPropertyChanged("Programcode")
 				    End If 
 			End Set
 		End Property
@@ -138,16 +138,16 @@ Private _Modifydate As Nullable(of DateTime)
 			End Set
 		End Property
 
-Private _Programcode As String
-		<DataMember(),DataField("PROGRAMCODE")> _
-		Public Property Programcode() As String
+Private _ActivityCat As String
+		<DataMember(),DataField("ACTIVITY_CAT")> _
+		Public Property ActivityCat() As String
 			Get
-				Return Me._Programcode
+				Return Me._ActivityCat
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
-						Me._Programcode = value
-						OnPropertyChanged("Programcode")
+					If (Object.ReferenceEquals(Me.ActivityCat, value) <> true) Then				    
+						Me._ActivityCat = value
+						OnPropertyChanged("ActivityCat")
 				    End If 
 			End Set
 		End Property

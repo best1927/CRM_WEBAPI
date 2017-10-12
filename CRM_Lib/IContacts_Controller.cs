@@ -19,6 +19,6 @@ namespace CRM_Lib
 
         GuResult<MSearchContacts > SearchContacts(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string local, string tagstr, Int64 curpage );
 
-
+        GuResult<MCrmContacts> Contact_FindByCode(Int64 ContactId);
     }
 }

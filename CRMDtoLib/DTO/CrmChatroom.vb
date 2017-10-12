@@ -26,7 +26,63 @@ Public Class CrmChatroom
 
 
 	
-	Private _Createdate As Nullable(of DateTime)
+	Private _ChatroomName As String
+		<DataMember(),DataField("CHATROOM_NAME")> _
+		Public Property ChatroomName() As String
+			Get
+				Return Me._ChatroomName
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.ChatroomName, value) <> true) Then				    
+						Me._ChatroomName = value
+						OnPropertyChanged("ChatroomName")
+				    End If 
+			End Set
+		End Property
+
+Private _Programcode As String
+		<DataMember(),DataField("PROGRAMCODE")> _
+		Public Property Programcode() As String
+			Get
+				Return Me._Programcode
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
+						Me._Programcode = value
+						OnPropertyChanged("Programcode")
+				    End If 
+			End Set
+		End Property
+
+Private _Modifydate As Nullable(of DateTime)
+		<DataMember(),DataField("MODIFYDATE")> _
+		Public Property Modifydate() As Nullable(of DateTime)
+			Get
+				Return Me._Modifydate
+			End Get
+			Set(ByVal value As Nullable(of DateTime))
+					If (Object.Equals(Me.Modifydate, value) <> true) Then				    
+						Me._Modifydate = value
+						OnPropertyChanged("Modifydate")
+				    End If 
+			End Set
+		End Property
+
+Private _Modifyuser As String
+		<DataMember(),DataField("MODIFYUSER")> _
+		Public Property Modifyuser() As String
+			Get
+				Return Me._Modifyuser
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Modifyuser, value) <> true) Then				    
+						Me._Modifyuser = value
+						OnPropertyChanged("Modifyuser")
+				    End If 
+			End Set
+		End Property
+
+Private _Createdate As Nullable(of DateTime)
 		<DataMember(),DataField("CREATEDATE")> _
 		Public Property Createdate() As Nullable(of DateTime)
 			Get
@@ -78,62 +134,6 @@ Private _Teamyn As String
 					If (Object.ReferenceEquals(Me.Teamyn, value) <> true) Then				    
 						Me._Teamyn = value
 						OnPropertyChanged("Teamyn")
-				    End If 
-			End Set
-		End Property
-
-Private _Programcode As String
-		<DataMember(),DataField("PROGRAMCODE")> _
-		Public Property Programcode() As String
-			Get
-				Return Me._Programcode
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
-						Me._Programcode = value
-						OnPropertyChanged("Programcode")
-				    End If 
-			End Set
-		End Property
-
-Private _ChatroomName As String
-		<DataMember(),DataField("CHATROOM_NAME")> _
-		Public Property ChatroomName() As String
-			Get
-				Return Me._ChatroomName
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.ChatroomName, value) <> true) Then				    
-						Me._ChatroomName = value
-						OnPropertyChanged("ChatroomName")
-				    End If 
-			End Set
-		End Property
-
-Private _Modifydate As Nullable(of DateTime)
-		<DataMember(),DataField("MODIFYDATE")> _
-		Public Property Modifydate() As Nullable(of DateTime)
-			Get
-				Return Me._Modifydate
-			End Get
-			Set(ByVal value As Nullable(of DateTime))
-					If (Object.Equals(Me.Modifydate, value) <> true) Then				    
-						Me._Modifydate = value
-						OnPropertyChanged("Modifydate")
-				    End If 
-			End Set
-		End Property
-
-Private _Modifyuser As String
-		<DataMember(),DataField("MODIFYUSER")> _
-		Public Property Modifyuser() As String
-			Get
-				Return Me._Modifyuser
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Modifyuser, value) <> true) Then				    
-						Me._Modifyuser = value
-						OnPropertyChanged("Modifyuser")
 				    End If 
 			End Set
 		End Property

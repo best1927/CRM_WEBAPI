@@ -40,6 +40,174 @@ Public Class CrmSpecialist
 			End Set
 		End Property
 
+Private _Programcode As String
+		<DataMember(),DataField("PROGRAMCODE")> _
+		Public Property Programcode() As String
+			Get
+				Return Me._Programcode
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
+						Me._Programcode = value
+						OnPropertyChanged("Programcode")
+				    End If 
+			End Set
+		End Property
+
+Private _Modifydate As Nullable(of DateTime)
+		<DataMember(),DataField("MODIFYDATE")> _
+		Public Property Modifydate() As Nullable(of DateTime)
+			Get
+				Return Me._Modifydate
+			End Get
+			Set(ByVal value As Nullable(of DateTime))
+					If (Object.Equals(Me.Modifydate, value) <> true) Then				    
+						Me._Modifydate = value
+						OnPropertyChanged("Modifydate")
+				    End If 
+			End Set
+		End Property
+
+Private _Modifyuser As String
+		<DataMember(),DataField("MODIFYUSER")> _
+		Public Property Modifyuser() As String
+			Get
+				Return Me._Modifyuser
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Modifyuser, value) <> true) Then				    
+						Me._Modifyuser = value
+						OnPropertyChanged("Modifyuser")
+				    End If 
+			End Set
+		End Property
+
+Private _Createdate As Nullable(of DateTime)
+		<DataMember(),DataField("CREATEDATE")> _
+		Public Property Createdate() As Nullable(of DateTime)
+			Get
+				Return Me._Createdate
+			End Get
+			Set(ByVal value As Nullable(of DateTime))
+					If (Object.Equals(Me.Createdate, value) <> true) Then				    
+						Me._Createdate = value
+						OnPropertyChanged("Createdate")
+				    End If 
+			End Set
+		End Property
+
+Private _Createuser As String
+		<DataMember(),DataField("CREATEUSER")> _
+		Public Property Createuser() As String
+			Get
+				Return Me._Createuser
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Createuser, value) <> true) Then				    
+						Me._Createuser = value
+						OnPropertyChanged("Createuser")
+				    End If 
+			End Set
+		End Property
+
+Private _Isdeleted As String
+		<DataMember(),DataField("ISDELETED")> _
+		Public Property Isdeleted() As String
+			Get
+				Return Me._Isdeleted
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Isdeleted, value) <> true) Then				    
+						Me._Isdeleted = value
+						OnPropertyChanged("Isdeleted")
+				    End If 
+			End Set
+		End Property
+
+Private _Priority As String
+		<DataMember(),DataField("PRIORITY")> _
+		Public Property Priority() As String
+			Get
+				Return Me._Priority
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Priority, value) <> true) Then				    
+						Me._Priority = value
+						OnPropertyChanged("Priority")
+				    End If 
+			End Set
+		End Property
+
+Private _Company As String
+		<DataMember(),DataField("COMPANY")> _
+		Public Property Company() As String
+			Get
+				Return Me._Company
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Company, value) <> true) Then				    
+						Me._Company = value
+						OnPropertyChanged("Company")
+				    End If 
+			End Set
+		End Property
+
+Private _JobCode As String
+		<DataMember(),DataField("JOB_CODE")> _
+		Public Property JobCode() As String
+			Get
+				Return Me._JobCode
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.JobCode, value) <> true) Then				    
+						Me._JobCode = value
+						OnPropertyChanged("JobCode")
+				    End If 
+			End Set
+		End Property
+
+Private _Birthdate As Nullable(of DateTime)
+		<DataMember(),DataField("BIRTHDATE")> _
+		Public Property Birthdate() As Nullable(of DateTime)
+			Get
+				Return Me._Birthdate
+			End Get
+			Set(ByVal value As Nullable(of DateTime))
+					If (Object.Equals(Me.Birthdate, value) <> true) Then				    
+						Me._Birthdate = value
+						OnPropertyChanged("Birthdate")
+				    End If 
+			End Set
+		End Property
+
+Private _LastnameOth As String
+		<DataMember(),DataField("LASTNAME_OTH")> _
+		Public Property LastnameOth() As String
+			Get
+				Return Me._LastnameOth
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.LastnameOth, value) <> true) Then				    
+						Me._LastnameOth = value
+						OnPropertyChanged("LastnameOth")
+				    End If 
+			End Set
+		End Property
+
+Private _FirstnameOth As String
+		<DataMember(),DataField("FIRSTNAME_OTH")> _
+		Public Property FirstnameOth() As String
+			Get
+				Return Me._FirstnameOth
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.FirstnameOth, value) <> true) Then				    
+						Me._FirstnameOth = value
+						OnPropertyChanged("FirstnameOth")
+				    End If 
+			End Set
+		End Property
+
 Private _OwnerId As Nullable(of Decimal)
 		<DataMember(),DataField("OWNER_ID")> _
 		Public Property OwnerId() As Nullable(of Decimal)
@@ -120,174 +288,6 @@ Private _LastnameLoc As String
 					If (Object.ReferenceEquals(Me.LastnameLoc, value) <> true) Then				    
 						Me._LastnameLoc = value
 						OnPropertyChanged("LastnameLoc")
-				    End If 
-			End Set
-		End Property
-
-Private _FirstnameOth As String
-		<DataMember(),DataField("FIRSTNAME_OTH")> _
-		Public Property FirstnameOth() As String
-			Get
-				Return Me._FirstnameOth
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.FirstnameOth, value) <> true) Then				    
-						Me._FirstnameOth = value
-						OnPropertyChanged("FirstnameOth")
-				    End If 
-			End Set
-		End Property
-
-Private _LastnameOth As String
-		<DataMember(),DataField("LASTNAME_OTH")> _
-		Public Property LastnameOth() As String
-			Get
-				Return Me._LastnameOth
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.LastnameOth, value) <> true) Then				    
-						Me._LastnameOth = value
-						OnPropertyChanged("LastnameOth")
-				    End If 
-			End Set
-		End Property
-
-Private _Birthdate As Nullable(of DateTime)
-		<DataMember(),DataField("BIRTHDATE")> _
-		Public Property Birthdate() As Nullable(of DateTime)
-			Get
-				Return Me._Birthdate
-			End Get
-			Set(ByVal value As Nullable(of DateTime))
-					If (Object.Equals(Me.Birthdate, value) <> true) Then				    
-						Me._Birthdate = value
-						OnPropertyChanged("Birthdate")
-				    End If 
-			End Set
-		End Property
-
-Private _JobCode As String
-		<DataMember(),DataField("JOB_CODE")> _
-		Public Property JobCode() As String
-			Get
-				Return Me._JobCode
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.JobCode, value) <> true) Then				    
-						Me._JobCode = value
-						OnPropertyChanged("JobCode")
-				    End If 
-			End Set
-		End Property
-
-Private _Company As String
-		<DataMember(),DataField("COMPANY")> _
-		Public Property Company() As String
-			Get
-				Return Me._Company
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Company, value) <> true) Then				    
-						Me._Company = value
-						OnPropertyChanged("Company")
-				    End If 
-			End Set
-		End Property
-
-Private _Priority As String
-		<DataMember(),DataField("PRIORITY")> _
-		Public Property Priority() As String
-			Get
-				Return Me._Priority
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Priority, value) <> true) Then				    
-						Me._Priority = value
-						OnPropertyChanged("Priority")
-				    End If 
-			End Set
-		End Property
-
-Private _Isdeleted As String
-		<DataMember(),DataField("ISDELETED")> _
-		Public Property Isdeleted() As String
-			Get
-				Return Me._Isdeleted
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Isdeleted, value) <> true) Then				    
-						Me._Isdeleted = value
-						OnPropertyChanged("Isdeleted")
-				    End If 
-			End Set
-		End Property
-
-Private _Createuser As String
-		<DataMember(),DataField("CREATEUSER")> _
-		Public Property Createuser() As String
-			Get
-				Return Me._Createuser
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Createuser, value) <> true) Then				    
-						Me._Createuser = value
-						OnPropertyChanged("Createuser")
-				    End If 
-			End Set
-		End Property
-
-Private _Createdate As Nullable(of DateTime)
-		<DataMember(),DataField("CREATEDATE")> _
-		Public Property Createdate() As Nullable(of DateTime)
-			Get
-				Return Me._Createdate
-			End Get
-			Set(ByVal value As Nullable(of DateTime))
-					If (Object.Equals(Me.Createdate, value) <> true) Then				    
-						Me._Createdate = value
-						OnPropertyChanged("Createdate")
-				    End If 
-			End Set
-		End Property
-
-Private _Modifyuser As String
-		<DataMember(),DataField("MODIFYUSER")> _
-		Public Property Modifyuser() As String
-			Get
-				Return Me._Modifyuser
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Modifyuser, value) <> true) Then				    
-						Me._Modifyuser = value
-						OnPropertyChanged("Modifyuser")
-				    End If 
-			End Set
-		End Property
-
-Private _Modifydate As Nullable(of DateTime)
-		<DataMember(),DataField("MODIFYDATE")> _
-		Public Property Modifydate() As Nullable(of DateTime)
-			Get
-				Return Me._Modifydate
-			End Get
-			Set(ByVal value As Nullable(of DateTime))
-					If (Object.Equals(Me.Modifydate, value) <> true) Then				    
-						Me._Modifydate = value
-						OnPropertyChanged("Modifydate")
-				    End If 
-			End Set
-		End Property
-
-Private _Programcode As String
-		<DataMember(),DataField("PROGRAMCODE")> _
-		Public Property Programcode() As String
-			Get
-				Return Me._Programcode
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
-						Me._Programcode = value
-						OnPropertyChanged("Programcode")
 				    End If 
 			End Set
 		End Property

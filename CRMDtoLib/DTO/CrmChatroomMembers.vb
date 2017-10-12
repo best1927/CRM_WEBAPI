@@ -10,21 +10,7 @@ Public Class CrmChatroomMembers
     Implements IEquatable(Of CrmChatroomMembers)
          
 	 
-   	Private _ChatroomId As Decimal
-		<DataMember(),DataField("CHATROOM_ID"),DataAnnotations.Key()> _
-		Public Property ChatroomId() As Decimal
-			Get
-				Return Me._ChatroomId
-			End Get
-			Set(ByVal value As Decimal)
-					If (Object.ReferenceEquals(Me.ChatroomId, value) <> true) Then
-						Me._ChatroomId = value
-						OnPropertyChanged("ChatroomId")
-					End If  
-			End Set
-		End Property
-
-Private _UserId As String
+   	Private _UserId As String
 		<DataMember(),DataField("USER_ID"),DataAnnotations.Key(), DataAnnotations.Required(AllowEmptyStrings:=False)> _
 		Public Property UserId() As String
 			Get
@@ -38,32 +24,32 @@ Private _UserId As String
 			End Set
 		End Property
 
-
-	
-	Private _Isleaved As String
-		<DataMember(),DataField("ISLEAVED")> _
-		Public Property Isleaved() As String
+Private _ChatroomId As Decimal
+		<DataMember(),DataField("CHATROOM_ID"),DataAnnotations.Key()> _
+		Public Property ChatroomId() As Decimal
 			Get
-				Return Me._Isleaved
+				Return Me._ChatroomId
 			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Isleaved, value) <> true) Then				    
-						Me._Isleaved = value
-						OnPropertyChanged("Isleaved")
-				    End If 
+			Set(ByVal value As Decimal)
+					If (Object.ReferenceEquals(Me.ChatroomId, value) <> true) Then
+						Me._ChatroomId = value
+						OnPropertyChanged("ChatroomId")
+					End If  
 			End Set
 		End Property
 
-Private _Createuser As String
-		<DataMember(),DataField("CREATEUSER")> _
-		Public Property Createuser() As String
+
+	
+	Private _Modifyuser As String
+		<DataMember(),DataField("MODIFYUSER")> _
+		Public Property Modifyuser() As String
 			Get
-				Return Me._Createuser
+				Return Me._Modifyuser
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Createuser, value) <> true) Then				    
-						Me._Createuser = value
-						OnPropertyChanged("Createuser")
+					If (Object.ReferenceEquals(Me.Modifyuser, value) <> true) Then				    
+						Me._Modifyuser = value
+						OnPropertyChanged("Modifyuser")
 				    End If 
 			End Set
 		End Property
@@ -82,16 +68,30 @@ Private _Createdate As Nullable(of DateTime)
 			End Set
 		End Property
 
-Private _Modifyuser As String
-		<DataMember(),DataField("MODIFYUSER")> _
-		Public Property Modifyuser() As String
+Private _Createuser As String
+		<DataMember(),DataField("CREATEUSER")> _
+		Public Property Createuser() As String
 			Get
-				Return Me._Modifyuser
+				Return Me._Createuser
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Modifyuser, value) <> true) Then				    
-						Me._Modifyuser = value
-						OnPropertyChanged("Modifyuser")
+					If (Object.ReferenceEquals(Me.Createuser, value) <> true) Then				    
+						Me._Createuser = value
+						OnPropertyChanged("Createuser")
+				    End If 
+			End Set
+		End Property
+
+Private _Isleaved As String
+		<DataMember(),DataField("ISLEAVED")> _
+		Public Property Isleaved() As String
+			Get
+				Return Me._Isleaved
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Isleaved, value) <> true) Then				    
+						Me._Isleaved = value
+						OnPropertyChanged("Isleaved")
 				    End If 
 			End Set
 		End Property
@@ -129,11 +129,11 @@ Private _Programcode As String
 	 
         Public Function Equals1(ByVal other As CrmChatroomMembers) As Boolean Implements System.IEquatable(Of CrmChatroomMembers).Equals
            
-           if Me.ChatroomId <> other.ChatroomId Then
+           if Me.UserId <> other.UserId Then
                 Return False
             End If
 
-if Me.UserId <> other.UserId Then
+if Me.ChatroomId <> other.ChatroomId Then
                 Return False
             End If
 
@@ -142,7 +142,7 @@ if Me.UserId <> other.UserId Then
         End Function
         
          Public Overrides Function GetHashCode() As Integer
-            Return GetHashValue(ChatroomId) Xor GetHashValue(UserId)
+            Return GetHashValue(UserId) Xor GetHashValue(ChatroomId)
         End Function
 	
 End Class

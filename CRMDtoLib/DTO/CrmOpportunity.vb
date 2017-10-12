@@ -26,16 +26,16 @@ Public Class CrmOpportunity
 
 
 	
-	Private _TitleName As String
-		<DataMember(),DataField("TITLE_NAME")> _
-		Public Property TitleName() As String
+	Private _Programcode As String
+		<DataMember(),DataField("PROGRAMCODE")> _
+		Public Property Programcode() As String
 			Get
-				Return Me._TitleName
+				Return Me._Programcode
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.TitleName, value) <> true) Then				    
-						Me._TitleName = value
-						OnPropertyChanged("TitleName")
+					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
+						Me._Programcode = value
+						OnPropertyChanged("Programcode")
 				    End If 
 			End Set
 		End Property
@@ -278,16 +278,16 @@ Private _Modifydate As Nullable(of DateTime)
 			End Set
 		End Property
 
-Private _Programcode As String
-		<DataMember(),DataField("PROGRAMCODE")> _
-		Public Property Programcode() As String
+Private _TitleName As String
+		<DataMember(),DataField("TITLE_NAME")> _
+		Public Property TitleName() As String
 			Get
-				Return Me._Programcode
+				Return Me._TitleName
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
-						Me._Programcode = value
-						OnPropertyChanged("Programcode")
+					If (Object.ReferenceEquals(Me.TitleName, value) <> true) Then				    
+						Me._TitleName = value
+						OnPropertyChanged("TitleName")
 				    End If 
 			End Set
 		End Property
