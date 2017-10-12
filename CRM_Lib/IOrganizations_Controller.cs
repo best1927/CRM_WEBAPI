@@ -23,7 +23,7 @@ namespace CRM_Lib
 
         GuResult<MSearchOrganization> SearchOrganization(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string local, string tagstr, Int64 curpage );
 
-        GuResult<MOrganization> Organization_FindByCode(int OrdId);
+        GuResult<MCrmOrganization> Organization_FindByCode(Int64 OrgId);
  
 
     }

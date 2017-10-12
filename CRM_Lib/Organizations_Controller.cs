@@ -28,20 +28,65 @@ namespace CRM_Lib
 
         public GuResult<string> DeleteOrganization(MCrmOrganization Obj, string user, string flag)
         {
-            throw new NotImplementedException();
+            GuResult<string> ret = new GuResult<string>();
+            IDbTransaction trn = null;
+            DateTime _d = DateTime.Now;
+
+            CRM_Controller crmlib = new CRM_Controller();
+            IDbCommand cmd = null;
+
+            try
+            {
+                Database database = CRM_Controller.GetDB();
+                using (IDbConnection conn = database.CreateOpenConnection())
+                {
+                    trn = conn.BeginTransaction();
+                    trn.Commit();
+                    cmd.Dispose();
+                    conn.Close();
+                    ret.IsComplete = true;
+                    ret.result = CRMMessageEnum.MessageEnum.MessageDataResponse.DataDeleted.ToString();
+                    ret.MsgText = CRMMessageEnum.MessageEnum.MessageDataResponse.DataDeleted.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                if (trn != null)
+                {
+                    trn.Rollback();
+                }
+                ret.result = null;
+                ret.IsComplete = false;
+                ret.MsgText = ex.Message;
+                throw ex;
+            }
+
+            return ret;
         }
 
         public GuResult<string> SaveOrganization(MCrmOrganization Obj, string user, string flag)
         {
-            throw new NotImplementedException();
+
+            GuResult<string> ret = new GuResult<string>();
+            if (flag == "N")
+            {
+                InsertOrganization(Obj, user, ref ret);
+            }
+            else
+            {
+                UpdateOrganization(Obj, user, ref ret);
+            }
+
+
+            return ret;
         }
 
-        public GuResult<MSearchOrganization> SearchOrganization(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string local, string tagstr, Int64 curpage )
+        public GuResult<MSearchOrganization> SearchOrganization(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string local, string tagstr, Int64 curpage)
         {
             GuResult<MSearchOrganization> ret = new GuResult<MSearchOrganization>();
             ret.result = new MSearchOrganization();
 
-         
+
             ret.result.MOrganizationList = new List<MOrganization>();
             ret.result.TagList = new List<CrmActivitiesTag>();
             IDbSimplyTransaction trn = null;
@@ -53,9 +98,9 @@ namespace CRM_Lib
             Dictionary<string, object> paramList = new Dictionary<string, object>();
             paramList.Add("LANG", lang);
             paramList.Add("LOCAL", local);
-            string strfilter = GetStringFilter(Alphabetfilter, Combofilter, txtFilter, tagstr,ref paramList);
+            string strfilter = GetStringFilter(Alphabetfilter, Combofilter, txtFilter, tagstr, ref paramList);
 
-            string sqlstr = "SELECT * FROM (SELECT ORGANIZE_ID, CASE WHEN :LANG <> :LOCAL THEN NVL(DESCR_OTH,DESCR_LOC) ELSE DESCR_OTH END AS ORGANIZE_NAME, ADDRESS || ( CASE WHEN SUBDISTRICT IS NOT NULL THEN ' ' || SUBDISTRICT ELSE '' END) || ( CASE WHEN DISTRICT IS NOT NULL THEN ' ' || DISTRICT ELSE '' END) || ( CASE WHEN CITY IS NOT NULL THEN ' ' || CASE WHEN :LANG <> :LOCAL THEN NVL(CI.DESC2,CI.DESC1) ELSE CI.DESC1 END ELSE '' END) || ( CASE WHEN STATE IS NOT NULL THEN ' ' || CASE WHEN :LANG <> :LOCAL THEN NVL(PO.DESC2,PO.DESC1) ELSE PO.DESC1 END ELSE '' END) || ( CASE WHEN COUNTRY IS NOT NULL THEN ' ' || CASE WHEN :LANG <> :LOCAL THEN NVL(CO.DESC2,CO.DESC1) ELSE CO.DESC1 END ELSE '' END) || ( CASE WHEN POSTALCODE IS NOT NULL THEN ' ' || POSTALCODE ELSE '' END) AS FULL_ADDRESS, ORGANIZE_URL, PHONE_HOME, PHONE_MOBILE, PHONE_OFFICE, CASE WHEN PHONE_FAX IS NOT NULL THEN 'Fax.' || PHONE_FAX ELSE '' END AS PHONE_FAX, CREATEUSER, CREATEDATE FROM CRM_ORGANIZATION O LEFT OUTER JOIN GENERAL_DESC CI ON CI.GDTYPE = 'CITY' AND O.CITY   = CI.GDCODE LEFT OUTER JOIN GENERAL_DESC PO ON PO.GDTYPE = 'STATE' AND O.STATE  = PO.GDCODE LEFT OUTER JOIN GENERAL_DESC CO ON CO.GDTYPE  = 'COTRY' AND O.COUNTRY = CO.GDCODE WHERE {0}  ORDER BY DESCR_LOC, DESCR_OTH, ADDRESS) M WHERE 1= 1 {1} ";
+            string sqlstr = "SELECT * FROM (SELECT ORGANIZE_ID,A_ID, CASE WHEN :LANG <> :LOCAL THEN NVL(DESCR_OTH,DESCR_LOC) ELSE DESCR_OTH END AS ORGANIZE_NAME, ADDRESS || ( CASE WHEN SUBDISTRICT IS NOT NULL THEN ' ' || SUBDISTRICT ELSE '' END) || ( CASE WHEN DISTRICT IS NOT NULL THEN ' ' || DISTRICT ELSE '' END) || ( CASE WHEN CITY IS NOT NULL THEN ' ' || CASE WHEN :LANG <> :LOCAL THEN NVL(CI.DESC2,CI.DESC1) ELSE CI.DESC1 END ELSE '' END) || ( CASE WHEN STATE IS NOT NULL THEN ' ' || CASE WHEN :LANG <> :LOCAL THEN NVL(PO.DESC2,PO.DESC1) ELSE PO.DESC1 END ELSE '' END) || ( CASE WHEN COUNTRY IS NOT NULL THEN ' ' || CASE WHEN :LANG <> :LOCAL THEN NVL(CO.DESC2,CO.DESC1) ELSE CO.DESC1 END ELSE '' END) || ( CASE WHEN POSTALCODE IS NOT NULL THEN ' ' || POSTALCODE ELSE '' END) AS FULL_ADDRESS, ORGANIZE_URL, PHONE_HOME, PHONE_MOBILE, PHONE_OFFICE, CASE WHEN PHONE_FAX IS NOT NULL THEN 'Fax.' || PHONE_FAX ELSE '' END AS PHONE_FAX, CREATEUSER, CREATEDATE FROM CRM_ORGANIZATION O LEFT OUTER JOIN GENERAL_DESC CI ON CI.GDTYPE = 'CITY' AND O.CITY   = CI.GDCODE LEFT OUTER JOIN GENERAL_DESC PO ON PO.GDTYPE = 'STATE' AND O.STATE  = PO.GDCODE LEFT OUTER JOIN GENERAL_DESC CO ON CO.GDTYPE  = 'COTRY' AND O.COUNTRY = CO.GDCODE WHERE {0}  ORDER BY DESCR_LOC, DESCR_OTH, ADDRESS) M WHERE 1= 1 {1} ";
 
             string sqlcntstr = String.Format("SELECT COUNT(*) FROM ( {0} )", string.Format(sqlstr, VisibleStr, strfilter));
             string sqlSearchstr = string.Format(sqlstr, VisibleStr, strfilter) + " ORDER BY ORGANIZE_NAME ";
@@ -72,7 +117,7 @@ namespace CRM_Lib
                     ret.result.MOrganizationList = (List<MOrganization>)dt.GetDTOs<MOrganization>();
 
 
-                    ret.result.TagList = crmlib.GetTagList("ACCATORG","O",userid ).result ;
+                    ret.result.TagList = crmlib.GetTagList("ACCATORG", "O", userid).result;
 
                     foreach (MOrganization d in ret.result.MOrganizationList)
                     {
@@ -110,14 +155,16 @@ namespace CRM_Lib
                                 }
                                 d.tagstr = xx;
                             }
-                        } 
+                        }
                     }
 
                 }
-                else {
+                else
+                {
 
                     ret.result.TagList = crmlib.GetTagList("ACCATORG", "O", userid).result;
-                    ret.MsgText = CRMMessageEnum.MessageEnum.MessageDataResponse.DataDoesNotExisits.ToString(); }
+                    ret.MsgText = CRMMessageEnum.MessageEnum.MessageDataResponse.DataDoesNotExisits.ToString();
+                }
 
                 ret.IsComplete = true;
 
@@ -134,13 +181,46 @@ namespace CRM_Lib
         }
 
 
-        public GuResult<MOrganization> Organization_FindByCode(int OrdId) {
-            GuResult<MOrganization> ret = new GuResult<MOrganization>();
+        public GuResult<MCrmOrganization> Organization_FindByCode(Int64 OrgId)
+        {
 
+            CRM_Controller crmlib = new CRM_Controller();
+            GuResult<MCrmOrganization> ret = new GuResult<MCrmOrganization>();
+            ret.result.OrgLinklst = new List<CrmActivitiesLink>();
+            ret.result.OrgSociallst = new List<CrmOrganizationSocial>();
+            ret.result.OrgAnniversarylst = new List<CrmOrganizationAnniversary>();
 
+            string sqlOrg = " SELECT * FROM CRM_ORGANIZATION WHERE ORGANIZE_ID = " + (int)OrgId;
+            string sqlOrgSocial = "SELECT * FROM CRM_ORGANIZATION_SOCIAL WHERE ORGANIZE_ID = " + (int)OrgId + " ORDER BY SEQ ";
+            string sqlOrgAnn = "SELECT * FROM CRM_ORGANIZATION_ANNIVERSARY WHERE ORGANIZE_ID = " + (int)OrgId + " ORDER BY ANNI_DT ";
+            try
+            {
+                var dt = crmlib.DoQuery(sqlOrg, null, null, 0, CRM_Controller.maxrows);
+                List<MCrmOrganization> tmp = (List<MCrmOrganization>)dt.GetDTOs<MCrmOrganization>();
+                if (tmp != null && tmp.Count > 0)
+                {
+                    ret.result = tmp[0];
+                    ret.result.OrgLinklst = crmlib.GetActivityLinkByOwner(ret.result.ActivityCat, (long)ret.result.OrganizeId, 0).result;
+                    var dt2 = crmlib.DoQuery(sqlOrgSocial, null, null, 0, CRM_Controller.maxrows);
+                    ret.result.OrgSociallst = (List<CrmOrganizationSocial>)dt2.GetDTOs<CrmOrganizationSocial>();
+                    var dt3 = crmlib.DoQuery(sqlOrgAnn, null, null, 0, CRM_Controller.maxrows);
+                    ret.result.OrgAnniversarylst = (List<CrmOrganizationAnniversary>)dt3.GetDTOs<CrmOrganizationAnniversary>();
+                }
+                else
+                {
+                    ret.MsgText = CRMMessageEnum.MessageEnum.MessageDataResponse.DataDoesNotExisits.ToString();
+                }
+
+                ret.IsComplete = true;
+            }
+            catch (Exception ex)
+            {
+                ret.IsComplete = false;
+                ret.MsgText = ex.Message.ToString();
+                throw ex;
+            }
             return ret;
         }
-
 
 
 
@@ -176,32 +256,360 @@ namespace CRM_Lib
                 }
             }
 
-            if (!string.IsNullOrEmpty(tagstr)) {
+            if (!string.IsNullOrEmpty(tagstr))
+            {
                 strfilter += "AND EXISTS(SELECT 1 FROM CRM_ACTIVITIES_TAG T WHERE  T.ACTIVITY_CAT = 'ACCATORG' AND  T.ACTIVITY_ID = M.ORGANIZE_ID AND T.TAG_ID = :TAG_ID) ";
                 paramList.Add("TAG_ID", tagstr);
             }
 
             if (!string.IsNullOrEmpty(Alphabetfilter))
             {
-                if (Alphabetfilter != "#") {
+                if (Alphabetfilter != "#")
+                {
                     strfilter += " AND  UPPER(M.ORGANIZE_NAME) LIKE  :ALPHABETFILTER || '%' ";
                     paramList.Add("ALPHABETFILTER", Alphabetfilter);
-                   
-                } else {
+
+                }
+                else
+                {
                     strfilter += " AND REGEXP_LIKE(SUBSTR(M.ORGANIZE_NAME,1,1), '[^A-Za-z]') ";
                 }
-               
+
             }
- 
+
             return strfilter;
 
         }
 
 
 
+        private void InsertOrganization(MCrmOrganization Obj, string userid, ref GuResult<string> ret)
+        {
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("select SEQ_CRM_ORGANIZATION.nextval from dual");
+            IDbCommand cmd = null;
+            IDbCommand cmdLink = null;
+            IDbCommand cmdSocial = null;
+            IDbCommand cmdAnn = null;
+            IDbCommand cmdSeq = null;
+            IDbTransaction trn = null;
+            DateTime _d = DateTime.Now;
+
+            int seqAnn = 0;
+            int seqSocial = 0;
+            int seqLink = 0;
+
+            try
+            {
+                Database database = CRM_Controller.GetDB();
+                using (IDbConnection conn = database.CreateOpenConnection())
+                {
+                    trn = conn.BeginTransaction();
+
+                    //Get Seq. for OrganizeId
+                    cmdSeq = conn.CreateCommand();
+                    cmdSeq.CommandText = sb.ToString();
+                    object tmp = cmdSeq.ExecuteScalar();
+                    if (!(tmp is DBNull))
+                    {
+                        int id;
+                        id = Convert.ToInt32(tmp);
+                        Obj.OrganizeId = id;
+                    }
+                    //Get Seq. for CONTACT_ID   
+
+                    //Insert OrganizeId
+                    Obj.ActivityCat = "ACCATORG";
+                    Obj.AId = InsertActivity(conn, trn, Obj, userid, _d);
+                    Obj.Createuser = userid;
+                    Obj.Createdate = _d;
+                    cmd = Obj.InsertCommand(conn);
+                    cmd.Transaction = trn;
+                    cmd.ExecuteNonQuery();
+
+                    //Insert OrgAnniversarylst
+                    if (Obj.OrgAnniversarylst != null && Obj.OrgAnniversarylst.Count > 0)
+                    {
+                        seqAnn = 0;
+                        foreach (CrmOrganizationAnniversary a in Obj.OrgAnniversarylst)
+                        {
+                            seqAnn += 1;
+                            a.OrganizeId = Obj.OrganizeId;
+                            a.Seq = seqAnn;
+                            a.Createuser = userid;
+                            a.Createdate = _d;
+                            cmdAnn = a.InsertCommand(conn);
+                            cmdAnn.Transaction = trn;
+                            cmdAnn.ExecuteNonQuery();
+
+                        }
+                    }
+
+                    //Insert OrgLinklst
+                    if (Obj.OrgLinklst != null && Obj.OrgLinklst.Count > 0)
+                    {
+                        seqLink = 0;
+                        foreach (CrmActivitiesLink b in Obj.OrgLinklst)
+                        {
+                            seqLink += 1;
+                            b.AId = (int)Obj.AId;
+                            b.ActivityId = Obj.OrganizeId;
+                            b.ActivityCat = Obj.ActivityCat;
+                            b.Seq = seqLink;
+                            b.Createuser = userid;
+                            b.Createdate = _d;
+                            cmdLink = b.InsertCommand(conn);
+                            cmdLink.Transaction = trn;
+                            cmdLink.ExecuteNonQuery();
+                        }
+                    }
+
+                    //Insert OrgSociallst
+                    if (Obj.OrgSociallst != null && Obj.OrgSociallst.Count > 0)
+                    {
+                        seqSocial = 0;
+                        foreach (CrmOrganizationSocial c in Obj.OrgSociallst)
+                        {
+                            seqSocial += 1;
+                            c.OrganizeId = Obj.OrganizeId;
+                            c.Seq = seqSocial;
+                            c.Createuser = userid;
+                            c.Createdate = _d;
+                            cmdSocial = c.InsertCommand(conn);
+                            cmdSocial.Transaction = trn;
+                            cmdSocial.ExecuteNonQuery();
+                        }
+                    }
+                    trn.Commit();
+                    cmd.Dispose();
+                    cmdSocial.Dispose();
+                    cmdLink.Dispose();
+                    cmdAnn.Dispose();
+                    conn.Close();
+                    ret.result = CRMMessageEnum.MessageEnum.MessageDataResponse.SaveCompleted.ToString();
+                    ret.MsgText = CRMMessageEnum.MessageEnum.MessageDataResponse.SaveCompleted.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                if (trn != null)
+                {
+                    trn.Rollback();
+                }
+                ret.result = null;
+                ret.IsComplete = false;
+                ret.MsgText = ex.Message;
+                throw ex;
+            }
+
+        }
+
+        private void UpdateOrganization(MCrmOrganization Obj, string userid, ref GuResult<string> ret)
+        {
+            CRM_Controller crmlib = new CRM_Controller();
+            StringBuilder sb = new StringBuilder();
+            sb.Append("select SEQ_CRM_CONTACTS.nextval from dual");
+            IDbCommand cmd = null;
+            IDbCommand cmdLink = null;
+            IDbCommand cmdSocial = null;
+            IDbCommand cmdAnn = null; 
+            IDbTransaction trn = null;
+            DateTime _d = DateTime.Now;
+
+
+            int seqAnn = 0;
+            int seqSocial = 0;
+            int seqLink = 0;
+
+            try
+            {
+                Database database = CRM_Controller.GetDB();
+                using (IDbConnection conn = database.CreateOpenConnection())
+                {
+                    trn = conn.BeginTransaction();
+
+
+                    //Update CrmOrganization
+                    Obj.Modifyuser = userid;
+                    Obj.Modifydate = DateTime.Now;
+                    cmd = Obj.UpdateCommand(conn, "Createuser,Createdate");
+                    cmd.Transaction = trn;
+                    cmd.ExecuteNonQuery();
+
+                    //Update OrgAnniversarylst
+                    if (Obj.OrgAnniversarylst != null && Obj.OrgAnniversarylst.Count > 0)
+                    {
+                        seqAnn = GetMaxAnniversarySeqId(conn, (int)Obj.OrganizeId);
+                        foreach (CrmOrganizationAnniversary a in Obj.OrgAnniversarylst)
+                        {
+                            if (a.EntityState == SsCommon.EntityStateLocal.Added)
+                            {
+                                seqAnn += 1;
+                                a.Seq = seqAnn;
+                                a.Createuser = userid;
+                                a.Createdate = DateTime.Now;
+                                cmdAnn = a.InsertCommand(conn);
+                            }
+                            else if (a.EntityState == SsCommon.EntityStateLocal.Modified)
+                            {
+                                a.Modifyuser = userid;
+                                a.Modifydate = DateTime.Now;
+                                cmdAnn = a.UpdateCommand(conn, "Createuser,Createdate");
+                            }
+                            else if (a.EntityState == SsCommon.EntityStateLocal.Deleted)
+                            {
+                                cmdAnn = a.DeleteCommand(conn);
+                            }
+                            cmdAnn.Transaction = trn;
+                            cmdAnn.ExecuteNonQuery();
+                        }
+                    }
+
+                    //Insert CRM_CONTACTS_Link
+                    if (Obj.OrgLinklst != null && Obj.OrgLinklst.Count > 0)
+                    {
+                        seqLink = crmlib.GetMaxLinkSeqId(conn, (int)Obj.AId);
+                        foreach (CrmActivitiesLink b in Obj.OrgLinklst)
+                        {
+                            if (b.EntityState == SsCommon.EntityStateLocal.Added)
+                            {
+                                seqLink += 1;
+                                b.Seq = seqLink;
+                                b.Createuser = userid;
+                                b.Createdate = DateTime.Now;
+                                cmdLink = b.InsertCommand(conn);
+                            }
+                            else if (b.EntityState == SsCommon.EntityStateLocal.Modified)
+                            {
+                                b.Modifyuser = userid;
+                                b.Modifydate = DateTime.Now;
+                                cmdLink = b.UpdateCommand(conn, "Createuser,Createdate");
+                            }
+                            else if (b.EntityState == SsCommon.EntityStateLocal.Deleted)
+                            {
+                                cmdLink = b.DeleteCommand(conn);
+                            }
+                            cmdLink.Transaction = trn;
+                            cmdLink.ExecuteNonQuery();
+                        }
+                    }
+
+
+                    //Insert CRM_CONTACTS_Social
+                    if (Obj.OrgSociallst != null && Obj.OrgSociallst.Count > 0)
+                    {
+                        seqSocial = GetMaxSocialSeqId(conn, (int)Obj.OrganizeId);
+                        foreach (CrmOrganizationSocial d in Obj.OrgSociallst)
+                        {
+                            if (d.EntityState == SsCommon.EntityStateLocal.Added)
+                            {
+                                seqSocial += 1;
+                                d.Seq = seqSocial;
+                                d.Createuser = userid;
+                                d.Createdate = DateTime.Now;
+                                cmdSocial = d.InsertCommand(conn);
+                            }
+                            else if (d.EntityState == SsCommon.EntityStateLocal.Modified)
+                            {
+                                d.Modifyuser = userid;
+                                d.Modifydate = DateTime.Now;
+                                cmdSocial = d.UpdateCommand(conn, "Createuser,Createdate");
+                            }
+                            else if (d.EntityState == SsCommon.EntityStateLocal.Deleted)
+                            {
+
+                                cmdSocial = d.DeleteCommand(conn);
+                            }
+                            cmdSocial.Transaction = trn;
+                            cmdSocial.ExecuteNonQuery();
+                        }
+                    }
 
 
 
+                    trn.Commit();
+                    cmd.Dispose();
+                    cmdLink.Dispose();
+                    cmdSocial.Dispose();
+                    cmdAnn.Dispose();
+                    conn.Close();
+                    ret.result = CRMMessageEnum.MessageEnum.MessageDataResponse.SaveCompleted.ToString();
+                    ret.MsgText = CRMMessageEnum.MessageEnum.MessageDataResponse.SaveCompleted.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                if (trn != null)
+                {
+                    trn.Rollback();
+                }
+                ret.result = null;
+                ret.IsComplete = false;
+                ret.MsgText = ex.Message;
+                throw ex;
+            }
+
+        }
+
+        private int InsertActivity(IDbConnection conn, IDbTransaction trn, MCrmOrganization Obj, string userid, DateTime _d)
+        {
+            int ret = -1;
+
+            CRM_Controller crmlib = new CRM_Controller();
+            MCrmActivities crmact = new MCrmActivities();
+            crmact.ActivityDate = _d;
+            crmact.ActivityId = Obj.OrganizeId;
+            crmact.ActivityCat = Obj.ActivityCat;
+            crmact.ActivityTime = _d.ToString("HH:mm:ss");
+            crmact.OwnerCat = Obj.ActivityCat;
+            crmact.OwnerId = Obj.OrganizeId;
+            crmact.AssignCat = Obj.ActivityCat;
+            crmact.AssignId = Obj.AssignId;
+            crmact.Topic = CRMMessageEnum.MessageEnum.MessageDataResponse.CreateOrganization.ToString();
+            crmact.VisibileCd = Obj.VisibileCd;
+            crmact.VisibileType = Obj.VisibileType;
+            crmact.Createdate = _d;
+            crmact.Createuser = userid;
+            ret = crmlib.InsertAcitvity(conn, trn, crmact, userid).result;
+
+            return ret;
+        }
+
+
+
+        public int GetMaxAnniversarySeqId(IDbConnection conn, int OrgId)
+        {
+            int ret = 0;
+            IDbCommand cmdSeq = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("select max(SEQ) from CRM_ORGANIZATION_ANNIVERSARY WHERE ORGANIZE_ID = " + OrgId);
+            cmdSeq = conn.CreateCommand();
+            cmdSeq.CommandText = sb.ToString();
+            object tmp = cmdSeq.ExecuteScalar();
+
+            if (!(tmp is DBNull))
+            {
+                ret = Convert.ToInt32(tmp);
+            }
+            return ret;
+        }
+        public int GetMaxSocialSeqId(IDbConnection conn, int OrgId)
+        {
+            int ret = 0;
+            IDbCommand cmdSeq = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("select max(SEQ) from CRM_ORGANIZATION_SOCIAL WHERE ORGANIZE_ID = " + OrgId);
+            cmdSeq = conn.CreateCommand();
+            cmdSeq.CommandText = sb.ToString();
+            object tmp = cmdSeq.ExecuteScalar();
+
+            if (!(tmp is DBNull))
+            {
+                ret = Convert.ToInt32(tmp);
+            }
+            return ret;
+        }
 
         #endregion
 

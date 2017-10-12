@@ -40,100 +40,16 @@ Private _Seq As Decimal
 
 
 	
-	Private _CatDate As String
-		<DataMember(),DataField("CAT_DATE")> _
-		Public Property CatDate() As String
+	Private _Programcode As String
+		<DataMember(),DataField("PROGRAMCODE")> _
+		Public Property Programcode() As String
 			Get
-				Return Me._CatDate
+				Return Me._Programcode
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.CatDate, value) <> true) Then				    
-						Me._CatDate = value
-						OnPropertyChanged("CatDate")
-				    End If 
-			End Set
-		End Property
-
-Private _AnniDt As Nullable(of DateTime)
-		<DataMember(),DataField("ANNI_DT")> _
-		Public Property AnniDt() As Nullable(of DateTime)
-			Get
-				Return Me._AnniDt
-			End Get
-			Set(ByVal value As Nullable(of DateTime))
-					If (Object.Equals(Me.AnniDt, value) <> true) Then				    
-						Me._AnniDt = value
-						OnPropertyChanged("AnniDt")
-				    End If 
-			End Set
-		End Property
-
-Private _NotifyYn As String
-		<DataMember(),DataField("NOTIFY_YN")> _
-		Public Property NotifyYn() As String
-			Get
-				Return Me._NotifyYn
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.NotifyYn, value) <> true) Then				    
-						Me._NotifyYn = value
-						OnPropertyChanged("NotifyYn")
-				    End If 
-			End Set
-		End Property
-
-Private _Schedule As String
-		<DataMember(),DataField("SCHEDULE")> _
-		Public Property Schedule() As String
-			Get
-				Return Me._Schedule
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Schedule, value) <> true) Then				    
-						Me._Schedule = value
-						OnPropertyChanged("Schedule")
-				    End If 
-			End Set
-		End Property
-
-Private _Createuser As String
-		<DataMember(),DataField("CREATEUSER")> _
-		Public Property Createuser() As String
-			Get
-				Return Me._Createuser
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Createuser, value) <> true) Then				    
-						Me._Createuser = value
-						OnPropertyChanged("Createuser")
-				    End If 
-			End Set
-		End Property
-
-Private _Createdate As Nullable(of DateTime)
-		<DataMember(),DataField("CREATEDATE")> _
-		Public Property Createdate() As Nullable(of DateTime)
-			Get
-				Return Me._Createdate
-			End Get
-			Set(ByVal value As Nullable(of DateTime))
-					If (Object.Equals(Me.Createdate, value) <> true) Then				    
-						Me._Createdate = value
-						OnPropertyChanged("Createdate")
-				    End If 
-			End Set
-		End Property
-
-Private _Modifyuser As String
-		<DataMember(),DataField("MODIFYUSER")> _
-		Public Property Modifyuser() As String
-			Get
-				Return Me._Modifyuser
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Modifyuser, value) <> true) Then				    
-						Me._Modifyuser = value
-						OnPropertyChanged("Modifyuser")
+					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
+						Me._Programcode = value
+						OnPropertyChanged("Programcode")
 				    End If 
 			End Set
 		End Property
@@ -152,16 +68,100 @@ Private _Modifydate As Nullable(of DateTime)
 			End Set
 		End Property
 
-Private _Programcode As String
-		<DataMember(),DataField("PROGRAMCODE")> _
-		Public Property Programcode() As String
+Private _Modifyuser As String
+		<DataMember(),DataField("MODIFYUSER")> _
+		Public Property Modifyuser() As String
 			Get
-				Return Me._Programcode
+				Return Me._Modifyuser
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
-						Me._Programcode = value
-						OnPropertyChanged("Programcode")
+					If (Object.ReferenceEquals(Me.Modifyuser, value) <> true) Then				    
+						Me._Modifyuser = value
+						OnPropertyChanged("Modifyuser")
+				    End If 
+			End Set
+		End Property
+
+Private _Createdate As Nullable(of DateTime)
+		<DataMember(),DataField("CREATEDATE")> _
+		Public Property Createdate() As Nullable(of DateTime)
+			Get
+				Return Me._Createdate
+			End Get
+			Set(ByVal value As Nullable(of DateTime))
+					If (Object.Equals(Me.Createdate, value) <> true) Then				    
+						Me._Createdate = value
+						OnPropertyChanged("Createdate")
+				    End If 
+			End Set
+		End Property
+
+Private _Createuser As String
+		<DataMember(),DataField("CREATEUSER")> _
+		Public Property Createuser() As String
+			Get
+				Return Me._Createuser
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Createuser, value) <> true) Then				    
+						Me._Createuser = value
+						OnPropertyChanged("Createuser")
+				    End If 
+			End Set
+		End Property
+
+Private _Schedule As String
+		<DataMember(),DataField("SCHEDULE")> _
+		Public Property Schedule() As String
+			Get
+				Return Me._Schedule
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Schedule, value) <> true) Then				    
+						Me._Schedule = value
+						OnPropertyChanged("Schedule")
+				    End If 
+			End Set
+		End Property
+
+Private _NotifyYn As String
+		<DataMember(),DataField("NOTIFY_YN")> _
+		Public Property NotifyYn() As String
+			Get
+				Return Me._NotifyYn
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.NotifyYn, value) <> true) Then				    
+						Me._NotifyYn = value
+						OnPropertyChanged("NotifyYn")
+				    End If 
+			End Set
+		End Property
+
+Private _AnniDt As Nullable(of DateTime)
+		<DataMember(),DataField("ANNI_DT")> _
+		Public Property AnniDt() As Nullable(of DateTime)
+			Get
+				Return Me._AnniDt
+			End Get
+			Set(ByVal value As Nullable(of DateTime))
+					If (Object.Equals(Me.AnniDt, value) <> true) Then				    
+						Me._AnniDt = value
+						OnPropertyChanged("AnniDt")
+				    End If 
+			End Set
+		End Property
+
+Private _CatDate As String
+		<DataMember(),DataField("CAT_DATE")> _
+		Public Property CatDate() As String
+			Get
+				Return Me._CatDate
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.CatDate, value) <> true) Then				    
+						Me._CatDate = value
+						OnPropertyChanged("CatDate")
 				    End If 
 			End Set
 		End Property

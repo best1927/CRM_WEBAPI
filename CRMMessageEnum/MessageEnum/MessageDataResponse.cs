@@ -12,7 +12,7 @@ namespace CRMMessageEnum.MessageEnum
     [MessageAtt("SSCRM")]
     public enum MessageDataResponse
     {
-        #region "0051 - 0100 Data Response"
+        #region "0051 - 0100 Data Response && 0101 - 0150 Event Message for Activity Topic"
         //TO Define Msg for Share all App in your Module
 
         /// <summary>
@@ -46,6 +46,26 @@ namespace CRMMessageEnum.MessageEnum
         [MsgTypeAtt(MsgTypeEnum.Success), MessageLangAtt("SSCRM0055"), MessageTemplateAtt("Data doesn't exisits.")]
         DataDoesNotExisits,
 
+
+
+
+        /// <summary>
+        /// Create Organization.
+        /// </summary>
+        [MsgTypeAtt(MsgTypeEnum.Success), MessageLangAtt("SSCRM0101"), MessageTemplateAtt("Create Organization")]
+        CreateOrganization,
+
+        /// <summary>
+        /// Create Contact.
+        /// </summary>
+        [MsgTypeAtt(MsgTypeEnum.Success), MessageLangAtt("SSCRM0102"), MessageTemplateAtt("Create Contact")]
+        CreateContact,
+
+        /// <summary>
+        /// Create Task.
+        /// </summary>
+        [MsgTypeAtt(MsgTypeEnum.Success), MessageLangAtt("SSCRM0103"), MessageTemplateAtt("Create Task")]
+        CreateTask,
 
 
 

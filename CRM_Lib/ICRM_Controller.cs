@@ -30,8 +30,11 @@ namespace CRM_Lib
         #region "Activity"
 
         GuResult<List<CrmActivitiesTag>> GetTagList(string activity, string alias, string userid);
-         
+        #region "Find ActivitiesList"
+        GuResult<MTimelineObjList> GetActivityByOwner(string ownercd, Int64 ownerid, string userid, Int64 curpage, string activitiescd = "");
 
+        GuResult<List<CrmActivitiesLink>> GetActivityLinkByOwner(string ownercd, Int64 ownerid, Int64 curpage);
+        #endregion
         #endregion
 
     }

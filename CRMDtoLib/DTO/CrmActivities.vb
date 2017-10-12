@@ -26,16 +26,16 @@ Public Class CrmActivities
 
 
 	
-	Private _ActivityCat As String
-		<DataMember(),DataField("ACTIVITY_CAT")> _
-		Public Property ActivityCat() As String
+	Private _Programcode As String
+		<DataMember(),DataField("PROGRAMCODE")> _
+		Public Property Programcode() As String
 			Get
-				Return Me._ActivityCat
+				Return Me._Programcode
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.ActivityCat, value) <> true) Then				    
-						Me._ActivityCat = value
-						OnPropertyChanged("ActivityCat")
+					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
+						Me._Programcode = value
+						OnPropertyChanged("Programcode")
 				    End If 
 			End Set
 		End Property
@@ -50,6 +50,34 @@ Private _ActivityId As Nullable(of Decimal)
 					If (Object.Equals(Me.ActivityId, value) <> true) Then				    
 						Me._ActivityId = value
 						OnPropertyChanged("ActivityId")
+				    End If 
+			End Set
+		End Property
+
+Private _ActivityDate As Nullable(of DateTime)
+		<DataMember(),DataField("ACTIVITY_DATE")> _
+		Public Property ActivityDate() As Nullable(of DateTime)
+			Get
+				Return Me._ActivityDate
+			End Get
+			Set(ByVal value As Nullable(of DateTime))
+					If (Object.Equals(Me.ActivityDate, value) <> true) Then				    
+						Me._ActivityDate = value
+						OnPropertyChanged("ActivityDate")
+				    End If 
+			End Set
+		End Property
+
+Private _ActivityTime As String
+		<DataMember(),DataField("ACTIVITY_TIME")> _
+		Public Property ActivityTime() As String
+			Get
+				Return Me._ActivityTime
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.ActivityTime, value) <> true) Then				    
+						Me._ActivityTime = value
+						OnPropertyChanged("ActivityTime")
 				    End If 
 			End Set
 		End Property
@@ -124,16 +152,30 @@ Private _Topic As String
 			End Set
 		End Property
 
-Private _Descr As String
-		<DataMember(),DataField("DESCR")> _
-		Public Property Descr() As String
+Private _Descr1 As String
+		<DataMember(),DataField("DESCR1")> _
+		Public Property Descr1() As String
 			Get
-				Return Me._Descr
+				Return Me._Descr1
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Descr, value) <> true) Then				    
-						Me._Descr = value
-						OnPropertyChanged("Descr")
+					If (Object.ReferenceEquals(Me.Descr1, value) <> true) Then				    
+						Me._Descr1 = value
+						OnPropertyChanged("Descr1")
+				    End If 
+			End Set
+		End Property
+
+Private _Descr2 As String
+		<DataMember(),DataField("DESCR2")> _
+		Public Property Descr2() As String
+			Get
+				Return Me._Descr2
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Descr2, value) <> true) Then				    
+						Me._Descr2 = value
+						OnPropertyChanged("Descr2")
 				    End If 
 			End Set
 		End Property
@@ -250,16 +292,16 @@ Private _Modifydate As Nullable(of DateTime)
 			End Set
 		End Property
 
-Private _Programcode As String
-		<DataMember(),DataField("PROGRAMCODE")> _
-		Public Property Programcode() As String
+Private _ActivityCat As String
+		<DataMember(),DataField("ACTIVITY_CAT")> _
+		Public Property ActivityCat() As String
 			Get
-				Return Me._Programcode
+				Return Me._ActivityCat
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
-						Me._Programcode = value
-						OnPropertyChanged("Programcode")
+					If (Object.ReferenceEquals(Me.ActivityCat, value) <> true) Then				    
+						Me._ActivityCat = value
+						OnPropertyChanged("ActivityCat")
 				    End If 
 			End Set
 		End Property

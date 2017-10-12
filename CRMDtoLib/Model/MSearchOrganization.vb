@@ -22,11 +22,19 @@ Namespace Model
         <DataMember> Public Property FullAddress As String
         <DataMember> Public Property PhoneHome As String
         <DataMember> Public Property PhoneMobile As String
-        <DataMember> Public Property PhoneOffice As String
-        <DataMember> Public Property PhoneFax As String
+        <DataMember> Public Property VisibileCd As String
+        <DataMember> Public Property VisibileType As String
+
 
         <DataMember> Public Property Phone As String
         <DataMember> Public Property OrganizeUrl As String
+
+        <DataMember> Public Property AId As Integer
+
+
+        <DataMember> Public Property PhoneOffice As String
+        <DataMember> Public Property PhoneFax As String
+
         <DataMember> Public Property tagstr As String
 
     End Class

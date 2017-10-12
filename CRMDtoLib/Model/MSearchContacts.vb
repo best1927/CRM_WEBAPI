@@ -23,6 +23,9 @@ Namespace Model
         <DataMember> Public Property OrganizeId As Integer
         <DataMember> Public Property OrganizeName As String
         <DataMember> Public Property PhotoUrl As String
+        <DataMember> Public Property VisibileCd As String
+        <DataMember> Public Property VisibileType As String
+        <DataMember> Public Property AId As Integer
         <DataMember> Public Property tagstr As String
 
     End Class

@@ -40,16 +40,16 @@ Public Class CrmActivitiesTag
 			End Set
 		End Property
 
-Private _Programcode As String
-		<DataMember(),DataField("PROGRAMCODE")> _
-		Public Property Programcode() As String
+Private _ActivityCat As String
+		<DataMember(),DataField("ACTIVITY_CAT")> _
+		Public Property ActivityCat() As String
 			Get
-				Return Me._Programcode
+				Return Me._ActivityCat
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
-						Me._Programcode = value
-						OnPropertyChanged("Programcode")
+					If (Object.ReferenceEquals(Me.ActivityCat, value) <> true) Then				    
+						Me._ActivityCat = value
+						OnPropertyChanged("ActivityCat")
 				    End If 
 			End Set
 		End Property
@@ -96,16 +96,16 @@ Private _Createdate As Nullable(of DateTime)
 			End Set
 		End Property
 
-Private _Createuser As String
-		<DataMember(),DataField("CREATEUSER")> _
-		Public Property Createuser() As String
+Private _Programcode As String
+		<DataMember(),DataField("PROGRAMCODE")> _
+		Public Property Programcode() As String
 			Get
-				Return Me._Createuser
+				Return Me._Programcode
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Createuser, value) <> true) Then				    
-						Me._Createuser = value
-						OnPropertyChanged("Createuser")
+					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
+						Me._Programcode = value
+						OnPropertyChanged("Programcode")
 				    End If 
 			End Set
 		End Property
@@ -166,20 +166,6 @@ Private _TagLabel As String
 			End Set
 		End Property
 
-Private _ActivityCat As String
-		<DataMember(),DataField("ACTIVITY_CAT")> _
-		Public Property ActivityCat() As String
-			Get
-				Return Me._ActivityCat
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.ActivityCat, value) <> true) Then				    
-						Me._ActivityCat = value
-						OnPropertyChanged("ActivityCat")
-				    End If 
-			End Set
-		End Property
-
 Private _ActivityId As Nullable(of Decimal)
 		<DataMember(),DataField("ACTIVITY_ID")> _
 		Public Property ActivityId() As Nullable(of Decimal)
@@ -190,6 +176,20 @@ Private _ActivityId As Nullable(of Decimal)
 					If (Object.Equals(Me.ActivityId, value) <> true) Then				    
 						Me._ActivityId = value
 						OnPropertyChanged("ActivityId")
+				    End If 
+			End Set
+		End Property
+
+Private _Createuser As String
+		<DataMember(),DataField("CREATEUSER")> _
+		Public Property Createuser() As String
+			Get
+				Return Me._Createuser
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Createuser, value) <> true) Then				    
+						Me._Createuser = value
+						OnPropertyChanged("Createuser")
 				    End If 
 			End Set
 		End Property

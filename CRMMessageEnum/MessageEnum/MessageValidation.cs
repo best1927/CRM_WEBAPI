@@ -11,30 +11,30 @@ namespace CRMMessageEnum.MessageEnum
 {
 
 
-[MessageAtt("SSCRM")]
-public enum MessageValidation
-{
+    [MessageAtt("SSCRM")]
+    public enum MessageValidation
+    {
 
-    #region "0101 - 0150 Validation"
-    //TO Define Msg for Share all App in your Module
+        #region "0151 - 0200 Validation"
+        //TO Define Msg for Share all App in your Module
 
-    /// <summary>
-    /// Data is exists
-    /// </summary>
-    [MsgTypeAtt(MsgTypeEnum.Info), MessageLangAtt("SSCRM0101"), MessageTemplateAtt("Data is exists")]
-    DataIsExists,
-    #endregion
+        /// <summary>
+        /// Data is exists
+        /// </summary>
+        [MsgTypeAtt(MsgTypeEnum.Info), MessageLangAtt("SSCRM0151"), MessageTemplateAtt("Data is exists")]
+        DataIsExists,
+        #endregion
 
         /// <summary>
         ///This document can't delete !!!
         /// </summary>
-        [MsgTypeAtt(MsgTypeEnum.Info), MessageLangAtt("SSCRM0102"), MessageTemplateAtt("This document can't delete !!!")]
+        [MsgTypeAtt(MsgTypeEnum.Info), MessageLangAtt("SSCRM0152"), MessageTemplateAtt("This document can't delete !!!")]
         DocumentCannotDelete,
 
         /// <summary>
         ///Data can't delete !!!
         /// </summary>
-        [MsgTypeAtt(MsgTypeEnum.Info), MessageLangAtt("SSCRM0103"), MessageTemplateAtt("Data can't delete !!!")]
+        [MsgTypeAtt(MsgTypeEnum.Info), MessageLangAtt("SSCRM0153"), MessageTemplateAtt("Data can't delete !!!")]
         DataCannotDelete
 
 

@@ -34,7 +34,7 @@ namespace CRM_Lib
 
 
 
-        public static int maxrows = !string.IsNullOrEmpty(rowtxt) ? Int32.Parse(rowtxt) : 20; 
+        public static int maxrows = !string.IsNullOrEmpty(rowtxt) ? Int32.Parse(rowtxt) : 20;
 
 
         private static CRM_Controller _instant = new CRM_Controller();
@@ -240,6 +240,42 @@ namespace CRM_Lib
 
 
             return ret;
+        } 
+
+        public string GetFwInitValue(string program, string keyname)
+        {
+
+            string ret = string.Empty;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT VALUE FROM FW_INIT WHERE PROGRAM_ID = '" + program + "'  AND KEY_NAME = '" + keyname + "'");
+            try
+            {
+                Database database = GetDB();
+                using (IDbConnection conn = database.CreateOpenConnection())
+                {
+                    List<MGeneralType> Objects = new List<MGeneralType>();
+                    IDbCommand command = database.CreateCommand(sb.ToString(), conn);
+
+                    command.Parameters.Clear();
+                    object tmp = command.ExecuteScalar();
+
+                    if (tmp != null)
+                    {
+                        ret = (string)tmp;
+                    }
+
+                    command.Dispose();
+                    conn.Close();
+                };
+            }
+            catch (Exception ex)
+            {
+                ret = "";
+                throw ex;
+            }
+
+            return ret;
         }
 
         public string convertDatetostring(System.DateTime pDate, string DateFormat)
@@ -349,6 +385,8 @@ namespace CRM_Lib
             }
             return ret;
         }
+         
+
         public int GetTagId(IDbConnection conn)
         {
             int ret = 0;
@@ -365,9 +403,9 @@ namespace CRM_Lib
             }
             return ret;
         }
-        public GuResult<String> InsertAcitvity(IDbConnection conn, IDbTransaction trn, MCrmActivities Obj, string user, string flag)
+        public GuResult<int> InsertAcitvity(IDbConnection conn, IDbTransaction trn, MCrmActivities Obj, string user)
         {
-            GuResult<String> ret = new GuResult<string>();
+            GuResult<int> ret = new GuResult<int>();
             int aId;
             DateTime _d = DateTime.Now;
             IDbCommand cmdAct = null;
@@ -389,21 +427,21 @@ namespace CRM_Lib
 
 
 
-                    if (Obj.LinkList != null && Obj.LinkList.Count > 0)
-                    {
+                    //if (Obj.LinkList != null && Obj.LinkList.Count > 0)
+                    //{
 
-                        foreach (CrmActivitiesLink l in Obj.LinkList)
-                        {
-                            InsertAcitvityLink(conn, trn, Obj.LinkList, user, "Y", aId);
-                        }
-                    }
+                    //    foreach (CrmActivitiesLink l in Obj.LinkList)
+                    //    {
+                    //        InsertAcitvityLink(conn, trn, Obj.LinkList, user, "Y", aId);
+                    //    }
+                    //}
 
                     if (Obj.TagList != null && Obj.TagList.Count > 0)
                     {
                         InsertAcitvityTag(conn, trn, Obj.TagList, user, aId);
 
                     }
-                    ret.result = CRMMessageEnum.MessageEnum.MessageDataResponse.SaveCompleted.ToString();
+                    ret.result = aId;
                     ret.IsComplete = true;
                 }
             }
@@ -413,7 +451,7 @@ namespace CRM_Lib
                 {
                     trn.Rollback();
                 }
-                ret.result = null;
+                ret.result = -1;
                 ret.IsComplete = false;
                 ret.MsgText = ex.Message;
                 throw ex;
@@ -538,7 +576,69 @@ namespace CRM_Lib
         }
 
         #region "Find ActivitiesList"
-        
+        public GuResult<MTimelineObjList> GetActivityByOwner(string ownercd, Int64 ownerid, string userid, Int64 curpage, string activitiescd = "")
+        {
+
+            GuResult<MTimelineObjList> ret = new GuResult<MTimelineObjList>();
+            Dictionary<string, object> paramList = new Dictionary<string, object>();
+
+
+            ret.result.TimeObjList = new List<MTimelineObj>();
+            string VisibleStr = this.GetVisibilityString("A", userid);
+            string actfilter = string.Empty;
+            ret.result.currRec = (int)curpage;
+            ret.result.maxRec = CRM_Controller.maxrows;
+
+            if (!string.IsNullOrEmpty(activitiescd))
+            {
+                actfilter = " ACTIVITY_CAT = :ACTIVITY_CAT AND ";
+                paramList.Add("ACTIVITY_CAT", activitiescd);
+            }
+
+            paramList.Add("OWNER_CAT", ownercd);
+            paramList.Add("OWNER_ID", ownerid);
+
+            string sqlstr = "SELECT DISTINCT A.* FROM CRM_ACTIVITIES A LEFT OUTER JOIN CRM_ACTIVITIES_LINK AK ON A.A_ID =  AK.A_ID WHERE {0} ((A.OWNER_CAT = :OWNER_CAT AND A.OWNER_ID = :OWNER_ID) OR (AK.CATEGORY = :OWNER_CAT AND AK.LINK_ID = :OWNER_ID)) {1} ";
+            string sqlcntstr = string.Format("SELECT COUNT(*) FROM {0}", string.Format(sqlstr, actfilter, VisibleStr));
+            string sqlsearchstr = string.Format(sqlstr, actfilter, VisibleStr) + "  ORDER BY A.Activity_Date DESC";
+
+            try
+            {
+                ret.result.totalRec = (int)this.ExecuteScalar(sqlcntstr, paramList, null);
+                var dt = this.DoQuery(sqlsearchstr, paramList, null, (int)curpage, CRM_Controller.maxrows);
+                ret.result.TimeObjList = (List<MTimelineObj>)dt.GetDTOs<MTimelineObj>();
+            }
+            catch (Exception ex)
+            {
+                ret.IsComplete = false;
+                ret.MsgText = ex.Message.ToString();
+                throw ex;
+            }
+
+            ret.IsComplete = true;
+            return ret;
+        }
+
+
+        public GuResult<List<CrmActivitiesLink>> GetActivityLinkByOwner(string ownercd, Int64 ownerid, Int64 curpage)
+        {
+            GuResult<List<CrmActivitiesLink>> ret = new GuResult<List<CrmActivitiesLink>>();
+            try
+            { 
+                string sqlstr = "SELECT * FROM CRM_ACTIVITIES_LINK WHERE ACTIVITY_CAT = '" + ownercd + "' AND ACTIVITY_ID = " + ownerid + " ";
+                var dt = this.DoQuery(sqlstr, null, null, (int)curpage, CRM_Controller.maxrows);
+                ret.result = (List<CrmActivitiesLink>)dt.GetDTOs<CrmActivitiesLink>();
+                ret.IsComplete = true;
+            }
+            catch (Exception ex)
+            {
+                ret.IsComplete = false;
+                ret.MsgText = ex.Message.ToString();
+                throw ex;
+            }
+            return ret;
+        }
+
         #endregion
 
         #region "Find By ActivitiesList Id"
@@ -546,7 +646,7 @@ namespace CRM_Lib
         #endregion
 
 
-
+        #endregion
 
 
     }
