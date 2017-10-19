@@ -81,7 +81,7 @@ namespace CRM_Lib
             return ret;
         }
 
-        public GuResult<MSearchOrganization> SearchOrganization(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string local, string tagstr, Int64 curpage)
+        public GuResult<MSearchOrganization> SearchOrganization(string Alphabetfilter, string Combofilter, string txtFilter, string userid, string lang, string tagstr, Int64 curpage)
         {
             GuResult<MSearchOrganization> ret = new GuResult<MSearchOrganization>();
             ret.result = new MSearchOrganization();
@@ -97,7 +97,7 @@ namespace CRM_Lib
 
             Dictionary<string, object> paramList = new Dictionary<string, object>();
             paramList.Add("LANG", lang);
-            paramList.Add("LOCAL", local);
+            paramList.Add("LOCAL", CRM_Controller.DefaultLang);
             string strfilter = GetStringFilter(Alphabetfilter, Combofilter, txtFilter, tagstr, ref paramList);
 
             string sqlstr = "SELECT * FROM (SELECT ORGANIZE_ID,A_ID, CASE WHEN :LANG <> :LOCAL THEN NVL(DESCR_OTH,DESCR_LOC) ELSE DESCR_LOC END AS ORGANIZE_NAME, ADDRESS || ( CASE WHEN SUBDISTRICT IS NOT NULL THEN ' ' || SUBDISTRICT ELSE '' END) || ( CASE WHEN DISTRICT IS NOT NULL THEN ' ' || DISTRICT ELSE '' END) || ( CASE WHEN CITY IS NOT NULL THEN ' ' || CASE WHEN :LANG <> :LOCAL THEN NVL(CI.DESC2,CI.DESC1) ELSE CI.DESC1 END ELSE '' END) || ( CASE WHEN STATE IS NOT NULL THEN ' ' || CASE WHEN :LANG <> :LOCAL THEN NVL(PO.DESC2,PO.DESC1) ELSE PO.DESC1 END ELSE '' END) || ( CASE WHEN COUNTRY IS NOT NULL THEN ' ' || CASE WHEN :LANG <> :LOCAL THEN NVL(CO.DESC2,CO.DESC1) ELSE CO.DESC1 END ELSE '' END) || ( CASE WHEN POSTALCODE IS NOT NULL THEN ' ' || POSTALCODE ELSE '' END) AS FULL_ADDRESS, ORGANIZE_URL, PHONE_HOME, PHONE_MOBILE, PHONE_OFFICE, CASE WHEN PHONE_FAX IS NOT NULL THEN 'Fax.' || PHONE_FAX ELSE '' END AS PHONE_FAX, CREATEUSER, CREATEDATE FROM CRM_ORGANIZATION O LEFT OUTER JOIN GENERAL_DESC CI ON CI.GDTYPE = 'CITY' AND O.CITY   = CI.GDCODE LEFT OUTER JOIN GENERAL_DESC PO ON PO.GDTYPE = 'STATE' AND O.STATE  = PO.GDCODE LEFT OUTER JOIN GENERAL_DESC CO ON CO.GDTYPE  = 'COTRY' AND O.COUNTRY = CO.GDCODE WHERE {0}  ORDER BY DESCR_LOC, DESCR_OTH, ADDRESS) M WHERE 1= 1 {1} ";
@@ -181,28 +181,51 @@ namespace CRM_Lib
         }
 
 
-        public GuResult<MCrmOrganization> Organization_FindByCode(Int64 OrgId)
+        public GuResult<MCrmOrganization> Organization_FindByCode(Int64 OrgId,string lang)
         {
 
             CRM_Controller crmlib = new CRM_Controller();
             GuResult<MCrmOrganization> ret = new GuResult<MCrmOrganization>();
-            ret.result.OrgLinklst = new List<CrmActivitiesLink>();
-            ret.result.OrgSociallst = new List<CrmOrganizationSocial>();
+            ret.result = new MCrmOrganization();
+            ret.result.OrgLinklst = new List<MCrmActivitiesLink>(); 
             ret.result.OrgAnniversarylst = new List<CrmOrganizationAnniversary>();
-
-            string sqlOrg = " SELECT * FROM CRM_ORGANIZATION WHERE ORGANIZE_ID = " + (int)OrgId;
-            string sqlOrgSocial = "SELECT * FROM CRM_ORGANIZATION_SOCIAL WHERE ORGANIZE_ID = " + (int)OrgId + " ORDER BY SEQ ";
+            Dictionary<string, object> paramList = new Dictionary<string, object>();
+            paramList.Add("LANG", lang);
+            paramList.Add("LOCAL", CRM_Controller.DefaultLang);
+            string sqlOrg = " SELECT O.*, ( CASE WHEN :LANG <> :LOCAL THEN NVL(O.DESCR_OTH,O.DESCR_LOC) ELSE O.DESCR_LOC END) AS ORG_NAME, (  CASE WHEN :LANG <> :LOCAL THEN NVL(ORTY.DESC2,ORTY.DESC1) ELSE ORTY.DESC1 END) AS ORG_TYPE_NAME,ADDRESS || ( CASE WHEN SUBDISTRICT IS NOT NULL THEN ' ' || SUBDISTRICT ELSE '' END) || ( CASE WHEN DISTRICT IS NOT NULL THEN ' ' || DISTRICT ELSE '' END) || ( CASE WHEN CITY IS NOT NULL THEN ' ' || CASE WHEN :LANG <> :LOCAL THEN NVL(CI.DESC2,CI.DESC1) ELSE CI.DESC1 END ELSE '' END) || ( CASE WHEN STATE IS NOT NULL THEN ' ' || CASE WHEN :LANG <> :LOCAL THEN NVL(PO.DESC2,PO.DESC1) ELSE PO.DESC1 END ELSE '' END) || ( CASE WHEN COUNTRY IS NOT NULL THEN ' ' || CASE WHEN :LANG <> :LOCAL THEN NVL(CO.DESC2,CO.DESC1) ELSE CO.DESC1 END ELSE '' END) || ( CASE WHEN POSTALCODE IS NOT NULL THEN ' ' || POSTALCODE ELSE '' END) AS FULL_ADDRESS  FROM CRM_ORGANIZATION O LEFT OUTER JOIN GENERAL_DESC ORTY ON ORTY.GDTYPE = 'ORGTY' AND  O.ORGANIZE_TYPE = ORTY.GDCODE LEFT OUTER JOIN GENERAL_DESC CI ON CI.GDTYPE = 'CITY' AND O.CITY   = CI.GDCODE LEFT OUTER JOIN GENERAL_DESC PO ON PO.GDTYPE = 'STATE' AND O.STATE  = PO.GDCODE LEFT OUTER JOIN GENERAL_DESC CO ON CO.GDTYPE  = 'COTRY' AND O.COUNTRY = CO.GDCODE WHERE ORGANIZE_ID = " + (int)OrgId;
+            
             string sqlOrgAnn = "SELECT * FROM CRM_ORGANIZATION_ANNIVERSARY WHERE ORGANIZE_ID = " + (int)OrgId + " ORDER BY ANNI_DT ";
             try
             {
-                var dt = crmlib.DoQuery(sqlOrg, null, null, 0, CRM_Controller.maxrows);
+                var dt = crmlib.DoQuery(sqlOrg, paramList, null, 0, CRM_Controller.maxrows);
                 List<MCrmOrganization> tmp = (List<MCrmOrganization>)dt.GetDTOs<MCrmOrganization>();
                 if (tmp != null && tmp.Count > 0)
                 {
                     ret.result = tmp[0];
-                    ret.result.OrgLinklst = crmlib.GetActivityLinkByOwner(ret.result.ActivityCat, (long)ret.result.OrganizeId, 0).result;
-                    var dt2 = crmlib.DoQuery(sqlOrgSocial, null, null, 0, CRM_Controller.maxrows);
-                    ret.result.OrgSociallst = (List<CrmOrganizationSocial>)dt2.GetDTOs<CrmOrganizationSocial>();
+
+                    if (!string.IsNullOrEmpty(ret.result.PhoneOffice))
+                    {
+                        ret.result.Phone = ret.result.PhoneOffice;
+                    }
+                    if (!string.IsNullOrEmpty(ret.result.PhoneMobile))
+                    {
+                        if (!string.IsNullOrEmpty(ret.result.Phone))
+                        {
+                            ret.result.Phone += ", " + ret.result.PhoneMobile + " ";
+                        }
+                        else
+                        {
+                            ret.result.Phone = ret.result.PhoneMobile + " ";
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(ret.result.PhoneFax))
+                    {
+                        ret.result.Phone += " Fax." + ret.result.PhoneFax;
+                    }
+                    ret.result.CreateDateStr = ret.result.Createdate.Value.ToString(CRM_Controller.DateStringformatAsp);
+                    ret.result.OrgLinklst = crmlib.GetActivityLinkByOwner(ret.result.ActivityCat, (long)ret.result.OrganizeId, 0,lang).result;
+                    
                     var dt3 = crmlib.DoQuery(sqlOrgAnn, null, null, 0, CRM_Controller.maxrows);
                     ret.result.OrgAnniversarylst = (List<CrmOrganizationAnniversary>)dt3.GetDTOs<CrmOrganizationAnniversary>();
                 }
@@ -289,15 +312,13 @@ namespace CRM_Lib
             StringBuilder sb = new StringBuilder();
             sb.Append("select SEQ_CRM_ORGANIZATION.nextval from dual");
             IDbCommand cmd = null;
-            IDbCommand cmdLink = null;
-            IDbCommand cmdSocial = null;
+            IDbCommand cmdLink = null; 
             IDbCommand cmdAnn = null;
             IDbCommand cmdSeq = null;
             IDbTransaction trn = null;
             DateTime _d = DateTime.Now;
 
-            int seqAnn = 0;
-            int seqSocial = 0;
+            int seqAnn = 0; 
             int seqLink = 0;
 
             try
@@ -365,25 +386,9 @@ namespace CRM_Lib
                         }
                     }
 
-                    //Insert OrgSociallst
-                    if (Obj.OrgSociallst != null && Obj.OrgSociallst.Count > 0)
-                    {
-                        seqSocial = 0;
-                        foreach (CrmOrganizationSocial c in Obj.OrgSociallst)
-                        {
-                            seqSocial += 1;
-                            c.OrganizeId = Obj.OrganizeId;
-                            c.Seq = seqSocial;
-                            c.Createuser = userid;
-                            c.Createdate = _d;
-                            cmdSocial = c.InsertCommand(conn);
-                            cmdSocial.Transaction = trn;
-                            cmdSocial.ExecuteNonQuery();
-                        }
-                    }
+                  
                     trn.Commit();
-                    cmd.Dispose();
-                    cmdSocial.Dispose();
+                    cmd.Dispose(); 
                     cmdLink.Dispose();
                     cmdAnn.Dispose();
                     conn.Close();
@@ -411,15 +416,13 @@ namespace CRM_Lib
             StringBuilder sb = new StringBuilder();
             sb.Append("select SEQ_CRM_CONTACTS.nextval from dual");
             IDbCommand cmd = null;
-            IDbCommand cmdLink = null;
-            IDbCommand cmdSocial = null;
+            IDbCommand cmdLink = null; 
             IDbCommand cmdAnn = null; 
             IDbTransaction trn = null;
             DateTime _d = DateTime.Now;
 
 
-            int seqAnn = 0;
-            int seqSocial = 0;
+            int seqAnn = 0; 
             int seqLink = 0;
 
             try
@@ -495,44 +498,12 @@ namespace CRM_Lib
                             cmdLink.ExecuteNonQuery();
                         }
                     }
-
-
-                    //Insert CRM_CONTACTS_Social
-                    if (Obj.OrgSociallst != null && Obj.OrgSociallst.Count > 0)
-                    {
-                        seqSocial = GetMaxSocialSeqId(conn, (int)Obj.OrganizeId);
-                        foreach (CrmOrganizationSocial d in Obj.OrgSociallst)
-                        {
-                            if (d.EntityState == SsCommon.EntityStateLocal.Added)
-                            {
-                                seqSocial += 1;
-                                d.Seq = seqSocial;
-                                d.Createuser = userid;
-                                d.Createdate = DateTime.Now;
-                                cmdSocial = d.InsertCommand(conn);
-                            }
-                            else if (d.EntityState == SsCommon.EntityStateLocal.Modified)
-                            {
-                                d.Modifyuser = userid;
-                                d.Modifydate = DateTime.Now;
-                                cmdSocial = d.UpdateCommand(conn, "Createuser,Createdate");
-                            }
-                            else if (d.EntityState == SsCommon.EntityStateLocal.Deleted)
-                            {
-
-                                cmdSocial = d.DeleteCommand(conn);
-                            }
-                            cmdSocial.Transaction = trn;
-                            cmdSocial.ExecuteNonQuery();
-                        }
-                    }
-
+                     
 
 
                     trn.Commit();
                     cmd.Dispose();
-                    cmdLink.Dispose();
-                    cmdSocial.Dispose();
+                    cmdLink.Dispose(); 
                     cmdAnn.Dispose();
                     conn.Close();
                     ret.result = CRMMessageEnum.MessageEnum.MessageDataResponse.SaveCompleted.ToString();

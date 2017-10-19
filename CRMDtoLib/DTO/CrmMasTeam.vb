@@ -40,63 +40,7 @@ Private _UserId As String
 
 
 	
-	Private _TeamSt As String
-		<DataMember(),DataField("TEAM_ST")> _
-		Public Property TeamSt() As String
-			Get
-				Return Me._TeamSt
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.TeamSt, value) <> true) Then				    
-						Me._TeamSt = value
-						OnPropertyChanged("TeamSt")
-				    End If 
-			End Set
-		End Property
-
-Private _DescrLoc As String
-		<DataMember(),DataField("DESCR_LOC")> _
-		Public Property DescrLoc() As String
-			Get
-				Return Me._DescrLoc
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.DescrLoc, value) <> true) Then				    
-						Me._DescrLoc = value
-						OnPropertyChanged("DescrLoc")
-				    End If 
-			End Set
-		End Property
-
-Private _DescrDesc As String
-		<DataMember(),DataField("DESCR_DESC")> _
-		Public Property DescrDesc() As String
-			Get
-				Return Me._DescrDesc
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.DescrDesc, value) <> true) Then				    
-						Me._DescrDesc = value
-						OnPropertyChanged("DescrDesc")
-				    End If 
-			End Set
-		End Property
-
-Private _TeamUserRole As String
-		<DataMember(),DataField("TEAM_USER_ROLE")> _
-		Public Property TeamUserRole() As String
-			Get
-				Return Me._TeamUserRole
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.TeamUserRole, value) <> true) Then				    
-						Me._TeamUserRole = value
-						OnPropertyChanged("TeamUserRole")
-				    End If 
-			End Set
-		End Property
-
-Private _Createuser As String
+	Private _Createuser As String
 		<DataMember(),DataField("CREATEUSER")> _
 		Public Property Createuser() As String
 			Get
@@ -162,6 +106,76 @@ Private _Programcode As String
 					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
 						Me._Programcode = value
 						OnPropertyChanged("Programcode")
+				    End If 
+			End Set
+		End Property
+
+Private _TeamSt As String
+		<DataMember(),DataField("TEAM_ST")> _
+		Public Property TeamSt() As String
+			Get
+				Return Me._TeamSt
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.TeamSt, value) <> true) Then				    
+						Me._TeamSt = value
+						OnPropertyChanged("TeamSt")
+				    End If 
+			End Set
+		End Property
+
+Private _DescrLoc As String
+		<DataMember(),DataField("DESCR_LOC")> _
+		Public Property DescrLoc() As String
+			Get
+				Return Me._DescrLoc
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.DescrLoc, value) <> true) Then				    
+						Me._DescrLoc = value
+						OnPropertyChanged("DescrLoc")
+				    End If 
+			End Set
+		End Property
+
+Private _DescrOth As String
+		<DataMember(),DataField("DESCR_OTH")> _
+		Public Property DescrOth() As String
+			Get
+				Return Me._DescrOth
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.DescrOth, value) <> true) Then				    
+						Me._DescrOth = value
+						OnPropertyChanged("DescrOth")
+				    End If 
+			End Set
+		End Property
+
+Private _Remarks As String
+		<DataMember(),DataField("REMARKS")> _
+		Public Property Remarks() As String
+			Get
+				Return Me._Remarks
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Remarks, value) <> true) Then				    
+						Me._Remarks = value
+						OnPropertyChanged("Remarks")
+				    End If 
+			End Set
+		End Property
+
+Private _TeamUserRole As String
+		<DataMember(),DataField("TEAM_USER_ROLE")> _
+		Public Property TeamUserRole() As String
+			Get
+				Return Me._TeamUserRole
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.TeamUserRole, value) <> true) Then				    
+						Me._TeamUserRole = value
+						OnPropertyChanged("TeamUserRole")
 				    End If 
 			End Set
 		End Property

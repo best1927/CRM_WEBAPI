@@ -26,105 +26,7 @@ Public Class CrmOrganization
 
 
 	
-	Private _VisibileCd As String
-		<DataMember(),DataField("VISIBILE_CD")> _
-		Public Property VisibileCd() As String
-			Get
-				Return Me._VisibileCd
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.VisibileCd, value) <> true) Then				    
-						Me._VisibileCd = value
-						OnPropertyChanged("VisibileCd")
-				    End If 
-			End Set
-		End Property
-
-Private _RefSapcode As String
-		<DataMember(),DataField("REF_SAPCODE")> _
-		Public Property RefSapcode() As String
-			Get
-				Return Me._RefSapcode
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.RefSapcode, value) <> true) Then				    
-						Me._RefSapcode = value
-						OnPropertyChanged("RefSapcode")
-				    End If 
-			End Set
-		End Property
-
-Private _RefMdm As String
-		<DataMember(),DataField("REF_MDM")> _
-		Public Property RefMdm() As String
-			Get
-				Return Me._RefMdm
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.RefMdm, value) <> true) Then				    
-						Me._RefMdm = value
-						OnPropertyChanged("RefMdm")
-				    End If 
-			End Set
-		End Property
-
-Private _Createuser As String
-		<DataMember(),DataField("CREATEUSER")> _
-		Public Property Createuser() As String
-			Get
-				Return Me._Createuser
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Createuser, value) <> true) Then				    
-						Me._Createuser = value
-						OnPropertyChanged("Createuser")
-				    End If 
-			End Set
-		End Property
-
-Private _Createdate As Nullable(of DateTime)
-		<DataMember(),DataField("CREATEDATE")> _
-		Public Property Createdate() As Nullable(of DateTime)
-			Get
-				Return Me._Createdate
-			End Get
-			Set(ByVal value As Nullable(of DateTime))
-					If (Object.Equals(Me.Createdate, value) <> true) Then				    
-						Me._Createdate = value
-						OnPropertyChanged("Createdate")
-				    End If 
-			End Set
-		End Property
-
-Private _Modifyuser As String
-		<DataMember(),DataField("MODIFYUSER")> _
-		Public Property Modifyuser() As String
-			Get
-				Return Me._Modifyuser
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Modifyuser, value) <> true) Then				    
-						Me._Modifyuser = value
-						OnPropertyChanged("Modifyuser")
-				    End If 
-			End Set
-		End Property
-
-Private _Modifydate As Nullable(of DateTime)
-		<DataMember(),DataField("MODIFYDATE")> _
-		Public Property Modifydate() As Nullable(of DateTime)
-			Get
-				Return Me._Modifydate
-			End Get
-			Set(ByVal value As Nullable(of DateTime))
-					If (Object.Equals(Me.Modifydate, value) <> true) Then				    
-						Me._Modifydate = value
-						OnPropertyChanged("Modifydate")
-				    End If 
-			End Set
-		End Property
-
-Private _Programcode As String
+	Private _Programcode As String
 		<DataMember(),DataField("PROGRAMCODE")> _
 		Public Property Programcode() As String
 			Get
@@ -134,20 +36,6 @@ Private _Programcode As String
 					If (Object.ReferenceEquals(Me.Programcode, value) <> true) Then				    
 						Me._Programcode = value
 						OnPropertyChanged("Programcode")
-				    End If 
-			End Set
-		End Property
-
-Private _ActivityCat As String
-		<DataMember(),DataField("ACTIVITY_CAT")> _
-		Public Property ActivityCat() As String
-			Get
-				Return Me._ActivityCat
-			End Get
-			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.ActivityCat, value) <> true) Then				    
-						Me._ActivityCat = value
-						OnPropertyChanged("ActivityCat")
 				    End If 
 			End Set
 		End Property
@@ -684,6 +572,48 @@ Private _Email As String
 			End Set
 		End Property
 
+Private _FacebookUrl As String
+		<DataMember(),DataField("FACEBOOK_URL")> _
+		Public Property FacebookUrl() As String
+			Get
+				Return Me._FacebookUrl
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.FacebookUrl, value) <> true) Then				    
+						Me._FacebookUrl = value
+						OnPropertyChanged("FacebookUrl")
+				    End If 
+			End Set
+		End Property
+
+Private _TwitterUrl As String
+		<DataMember(),DataField("TWITTER_URL")> _
+		Public Property TwitterUrl() As String
+			Get
+				Return Me._TwitterUrl
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.TwitterUrl, value) <> true) Then				    
+						Me._TwitterUrl = value
+						OnPropertyChanged("TwitterUrl")
+				    End If 
+			End Set
+		End Property
+
+Private _LineAcc As String
+		<DataMember(),DataField("LINE_ACC")> _
+		Public Property LineAcc() As String
+			Get
+				Return Me._LineAcc
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.LineAcc, value) <> true) Then				    
+						Me._LineAcc = value
+						OnPropertyChanged("LineAcc")
+				    End If 
+			End Set
+		End Property
+
 Private _PhotoUrl As String
 		<DataMember(),DataField("PHOTO_URL")> _
 		Public Property PhotoUrl() As String
@@ -778,6 +708,118 @@ Private _VisibileType As String
 					If (Object.ReferenceEquals(Me.VisibileType, value) <> true) Then				    
 						Me._VisibileType = value
 						OnPropertyChanged("VisibileType")
+				    End If 
+			End Set
+		End Property
+
+Private _VisibileCd As String
+		<DataMember(),DataField("VISIBILE_CD")> _
+		Public Property VisibileCd() As String
+			Get
+				Return Me._VisibileCd
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.VisibileCd, value) <> true) Then				    
+						Me._VisibileCd = value
+						OnPropertyChanged("VisibileCd")
+				    End If 
+			End Set
+		End Property
+
+Private _RefSapcode As String
+		<DataMember(),DataField("REF_SAPCODE")> _
+		Public Property RefSapcode() As String
+			Get
+				Return Me._RefSapcode
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.RefSapcode, value) <> true) Then				    
+						Me._RefSapcode = value
+						OnPropertyChanged("RefSapcode")
+				    End If 
+			End Set
+		End Property
+
+Private _RefMdm As String
+		<DataMember(),DataField("REF_MDM")> _
+		Public Property RefMdm() As String
+			Get
+				Return Me._RefMdm
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.RefMdm, value) <> true) Then				    
+						Me._RefMdm = value
+						OnPropertyChanged("RefMdm")
+				    End If 
+			End Set
+		End Property
+
+Private _Createuser As String
+		<DataMember(),DataField("CREATEUSER")> _
+		Public Property Createuser() As String
+			Get
+				Return Me._Createuser
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Createuser, value) <> true) Then				    
+						Me._Createuser = value
+						OnPropertyChanged("Createuser")
+				    End If 
+			End Set
+		End Property
+
+Private _Createdate As Nullable(of DateTime)
+		<DataMember(),DataField("CREATEDATE")> _
+		Public Property Createdate() As Nullable(of DateTime)
+			Get
+				Return Me._Createdate
+			End Get
+			Set(ByVal value As Nullable(of DateTime))
+					If (Object.Equals(Me.Createdate, value) <> true) Then				    
+						Me._Createdate = value
+						OnPropertyChanged("Createdate")
+				    End If 
+			End Set
+		End Property
+
+Private _Modifyuser As String
+		<DataMember(),DataField("MODIFYUSER")> _
+		Public Property Modifyuser() As String
+			Get
+				Return Me._Modifyuser
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.Modifyuser, value) <> true) Then				    
+						Me._Modifyuser = value
+						OnPropertyChanged("Modifyuser")
+				    End If 
+			End Set
+		End Property
+
+Private _Modifydate As Nullable(of DateTime)
+		<DataMember(),DataField("MODIFYDATE")> _
+		Public Property Modifydate() As Nullable(of DateTime)
+			Get
+				Return Me._Modifydate
+			End Get
+			Set(ByVal value As Nullable(of DateTime))
+					If (Object.Equals(Me.Modifydate, value) <> true) Then				    
+						Me._Modifydate = value
+						OnPropertyChanged("Modifydate")
+				    End If 
+			End Set
+		End Property
+
+Private _ActivityCat As String
+		<DataMember(),DataField("ACTIVITY_CAT")> _
+		Public Property ActivityCat() As String
+			Get
+				Return Me._ActivityCat
+			End Get
+			Set(ByVal value As String)
+					If (Object.ReferenceEquals(Me.ActivityCat, value) <> true) Then				    
+						Me._ActivityCat = value
+						OnPropertyChanged("ActivityCat")
 				    End If 
 			End Set
 		End Property

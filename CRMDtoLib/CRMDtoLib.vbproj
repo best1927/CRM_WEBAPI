@@ -87,7 +87,6 @@
     <Compile Include="DTO\CrmContactsAnniversary.vb" />
     <Compile Include="DTO\CrmContactsLink.vb" />
     <Compile Include="DTO\CrmContactsRelative.vb" />
-    <Compile Include="DTO\CrmContactsSocial.vb" />
     <Compile Include="DTO\CrmContactsVisibility.vb" />
     <Compile Include="DTO\CrmEmail.vb" />
     <Compile Include="DTO\CrmEmailAttach.vb" />
@@ -106,7 +105,6 @@
     <Compile Include="DTO\CrmOrganization.vb" />
     <Compile Include="DTO\CrmOrganizationAnniversary.vb" />
     <Compile Include="DTO\CrmOrganizationLink.vb" />
-    <Compile Include="DTO\CrmOrganizationSocial.vb" />
     <Compile Include="DTO\CrmOrganizationVisibility.vb" />
     <Compile Include="DTO\CrmPlace.vb" />
     <Compile Include="DTO\CrmProject.vb" />
@@ -138,8 +136,10 @@
     <Compile Include="DTO\MasUserPermission.vb" />
     <Compile Include="DTO\MasUserToken.vb" />
     <Compile Include="Model\MCrmActivities.vb" />
+    <Compile Include="Model\MCrmActivitiesLink.vb" />
     <Compile Include="Model\MCrmContacts.vb" />
     <Compile Include="Model\MCrmOrganization.vb" />
+    <Compile Include="Model\MLookupObj.vb" />
     <Compile Include="Model\MTimelineObjList.vb" />
     <Compile Include="Model\MGeneralType.vb" />
     <Compile Include="Model\MSearchOrganization.vb" />

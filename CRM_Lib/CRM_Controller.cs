@@ -31,9 +31,11 @@ namespace CRM_Lib
         public static string dbConnection = ConfigurationManager.AppSettings["dbConnection"].ToString();
         public static string dbType = ConfigurationManager.AppSettings["dbTypeConnection"].ToString();
         public static string rowtxt = ConfigurationManager.AppSettings["DefaultGridRow"].ToString();
+        public static string DefaultLang = ConfigurationManager.AppSettings["DefaultLanguage"].ToString();
 
-
-
+        public static string DateTimeformatAsp = ConfigurationManager.AppSettings["DisplayDateTimeFormat_asp"].ToString();
+        public static string DateformatAsp = ConfigurationManager.AppSettings["DisplayDateFormat_asp"].ToString();
+        public static string DateStringformatAsp = ConfigurationManager.AppSettings["DisplayDateStringFormat_asp"].ToString();
         public static int maxrows = !string.IsNullOrEmpty(rowtxt) ? Int32.Parse(rowtxt) : 20;
 
 
@@ -189,14 +191,14 @@ namespace CRM_Lib
         }
 
 
-        public GuResult<List<MGeneralType>> GetGdList(String GdList)
+        public GuResult<List<MGeneralType>> GetGdList(string lang,string GdList)
         {
             string[] GdlstTmp = GdList.Split(',');
             GuResult<List<MGeneralType>> ret = new GuResult<List<MGeneralType>>();
             ret.result = new List<MGeneralType>();
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT * FROM GENERAL_DESC WHERE GDTYPE = :GDTYPE ORDER BY COND2,GDCODE ");
+            sb.Append("SELECT G.*,(CASE WHEN :LANG <> :LOCAL THEN NVL(DESC2,DESC1) ELSE DESC1 END) AS DESCR FROM GENERAL_DESC G WHERE GDTYPE = :GDTYPE ORDER BY COND2,GDCODE ");
             try
             {
 
@@ -211,13 +213,15 @@ namespace CRM_Lib
                         {
                             MGeneralType m = new MGeneralType();
                             m.GdType = Gd;
-                            m.GdCodeLst = new List<GeneralDesc>();
+                            m.GdCodeLst = new List<MGeneralDesc>();
                             command.Parameters.Clear();
+                            command.Parameters.Add(database.CreateParameter("LANG", lang));
+                            command.Parameters.Add(database.CreateParameter("LOCAL", DefaultLang));
                             command.Parameters.Add(database.CreateParameter("GDTYPE", Gd));
                             IDataReader rdr = command.ExecuteReader();
                             while (rdr.Read())
                             {
-                                GeneralDesc n = new GeneralDesc();
+                                MGeneralDesc n = new MGeneralDesc();
                                 n.RetrieveFromDataReader(rdr);
                                 m.GdCodeLst.Add(n);
                             }
@@ -240,7 +244,29 @@ namespace CRM_Lib
 
 
             return ret;
-        } 
+        }
+
+
+        public GuResult<List<MLookupObj>> GetSubGdList(string MGdCode, string lang)
+        {
+            GuResult<List<MLookupObj>> ret = new GuResult<List<MLookupObj>>();
+            string filtersql = string.Empty;
+            Dictionary<string, object> paramList = new Dictionary<string, object>();
+            paramList.Add("LANG", lang);
+            paramList.Add("LOCAL", DefaultLang);
+            paramList.Add("MGDCODE", MGdCode);
+            string sqlstr = ("SELECT GDCODE AS CODE ,(CASE WHEN :LANG <> :LOCAL THEN NVL(DESC2,DESC1) ELSE DESC1 END) AS NAME FROM GENERAL_DESC WHERE DESC5 = :MGDCODE ORDER BY COND2,GDCODE ");
+            try
+            {
+                var dt = this.DoQuery(sqlstr, paramList, null, 0, 999999);
+                ret.result = (List<MLookupObj>)dt.GetDTOs<MLookupObj>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ret;
+        }
 
         public string GetFwInitValue(string program, string keyname)
         {
@@ -346,7 +372,70 @@ namespace CRM_Lib
             return ret;
         }
 
+        #region"GetUserOrTeam"
+        public GuResult<List<MLookupObj>> GetUserOrTeam(string infotype, string txtFilter, string lang)
+        {
+            GuResult<List<MLookupObj>> ret = new GuResult<List<MLookupObj>>();
 
+            if (infotype == "ASSTY_P")
+            {
+                GetUserList(ref ret, txtFilter, lang);
+            }
+            else
+            {
+                GetTeamList(ref ret, txtFilter, lang);
+            }
+
+            return ret;
+        }
+        public void GetUserList(ref GuResult<List<MLookupObj>> ret, string txtFilter, string lang)
+        {
+            string filtersql = string.Empty;
+            Dictionary<string, object> paramList = new Dictionary<string, object>();
+            paramList.Add("LANG", lang);
+            paramList.Add("LOCAL", DefaultLang);
+            if (!string.IsNullOrEmpty(txtFilter))
+            {
+                filtersql = " (UPPER(NAME_LOC) LIKE  :TXTFILTER || '%' OR  UPPER(NAME_OTH) LIKE   :TXTFILTER || '%' ) AND  "; 
+                paramList.Add("TXTFILTER", txtFilter);
+            }
+            string sqlstr = string.Format("SELECT CONTACT_ID AS CODE ,(CASE WHEN :LANG <> :LOCAL THEN NVL(NAME_OTH,NAME_LOC) ELSE NAME_LOC END) AS NAME FROM CRM_CONTACTS WHERE {0} 1 = 1 ORDER BY NAME " , filtersql);
+            try
+            {
+                var dt = this.DoQuery(sqlstr, paramList, null, 0, 999999);
+                ret.result = (List<MLookupObj>)dt.GetDTOs<MLookupObj>();
+            }
+            catch (Exception ex)
+            { 
+                throw ex;
+            }
+
+        }
+        public void GetTeamList(ref GuResult<List<MLookupObj>> ret, string txtFilter, string lang)
+        {
+            string filtersql = string.Empty;
+            Dictionary<string, object> paramList = new Dictionary<string, object>();
+            paramList.Add("LANG", lang);
+            paramList.Add("LOCAL", DefaultLang);
+            if (!string.IsNullOrEmpty(txtFilter))
+            { 
+                filtersql = " (UPPER(DESCR_LOC) LIKE   :TXTFILTER || '%' OR  UPPER(DESCR_OTH) LIKE  :TXTFILTER || '%' ) AND  ";
+                paramList.Add("TXTFILTER", txtFilter);
+            }
+
+            string sqlstr = string.Format("SELECT DISTINCT TEAM_ID AS CODE ,(CASE WHEN :LANG <> :LOCAL THEN NVL(DESCR_OTH,DESCR_LOC) ELSE DESCR_LOC END) AS NAME FROM CRM_MAS_TEAM WHERE {0} 1 = 1 ORDER BY NAME", filtersql);
+            try
+            {
+                var dt = this.DoQuery(sqlstr, paramList, null, 0, 999999);
+                ret.result = (List<MLookupObj>)dt.GetDTOs<MLookupObj>();
+            }
+            catch (Exception ex)
+            { 
+                throw ex;
+            }
+        }
+
+        #endregion
 
         #region "Activity"
 
@@ -385,7 +474,7 @@ namespace CRM_Lib
             }
             return ret;
         }
-         
+
 
         public int GetTagId(IDbConnection conn)
         {
@@ -459,7 +548,7 @@ namespace CRM_Lib
 
             return ret;
         }
-        public GuResult<String> InsertAcitvityLink(IDbConnection conn, IDbTransaction trn, List<CrmActivitiesLink> Obj, string user, string flagNew = "N", int aId = -1)
+        public GuResult<String> InsertAcitvityLink(IDbConnection conn, IDbTransaction trn, List<MCrmActivitiesLink> Obj, string user, string flagNew = "N", int aId = -1)
         {
             GuResult<String> ret = new GuResult<string>();
             IDbCommand cmdActLink = null;
@@ -468,7 +557,7 @@ namespace CRM_Lib
 
             cmdActLink = conn.CreateCommand();
             cmdActLink.Transaction = trn;
-            foreach (CrmActivitiesLink l in Obj)
+            foreach (MCrmActivitiesLink l in Obj)
             {
 
                 if (aId > -1)
@@ -494,13 +583,13 @@ namespace CRM_Lib
             return ret;
         }
 
-        public GuResult<String> DeleteAcitvityLink(IDbConnection conn, IDbTransaction trn, List<CrmActivitiesLink> Obj)
+        public GuResult<String> DeleteAcitvityLink(IDbConnection conn, IDbTransaction trn, List<MCrmActivitiesLink> Obj)
         {
             GuResult<String> ret = new GuResult<string>();
             IDbCommand cmdActLink = null;
             cmdActLink = conn.CreateCommand();
             cmdActLink.Transaction = trn;
-            foreach (CrmActivitiesLink l in Obj)
+            foreach (MCrmActivitiesLink l in Obj)
             {
                 cmdActLink = l.DeleteCommand(conn);
                 cmdActLink.ExecuteNonQuery();
@@ -576,37 +665,66 @@ namespace CRM_Lib
         }
 
         #region "Find ActivitiesList"
-        public GuResult<MTimelineObjList> GetActivityByOwner(string ownercd, Int64 ownerid, string userid, Int64 curpage, string activitiescd = "")
+        public GuResult<MTimelineObjList> GetActivityByOwner(string ownercd, Int64 ownerid, string userid, Int64 curpage, string lang, string txtFilter, string activitiescd = "")
         {
 
             GuResult<MTimelineObjList> ret = new GuResult<MTimelineObjList>();
             Dictionary<string, object> paramList = new Dictionary<string, object>();
-
-
+            paramList.Add("LANG", lang);
+            paramList.Add("LOCAL", DefaultLang);
+            ret.result = new MTimelineObjList();
             ret.result.TimeObjList = new List<MTimelineObj>();
             string VisibleStr = this.GetVisibilityString("A", userid);
             string actfilter = string.Empty;
+            string filter = string.Empty;
             ret.result.currRec = (int)curpage;
             ret.result.maxRec = CRM_Controller.maxrows;
 
             if (!string.IsNullOrEmpty(activitiescd))
             {
-                actfilter = " ACTIVITY_CAT = :ACTIVITY_CAT AND ";
+                actfilter = " A.ACTIVITY_CAT = :ACTIVITY_CAT AND ";
                 paramList.Add("ACTIVITY_CAT", activitiescd);
             }
 
             paramList.Add("OWNER_CAT", ownercd);
             paramList.Add("OWNER_ID", ownerid);
 
-            string sqlstr = "SELECT DISTINCT A.* FROM CRM_ACTIVITIES A LEFT OUTER JOIN CRM_ACTIVITIES_LINK AK ON A.A_ID =  AK.A_ID WHERE {0} ((A.OWNER_CAT = :OWNER_CAT AND A.OWNER_ID = :OWNER_ID) OR (AK.CATEGORY = :OWNER_CAT AND AK.LINK_ID = :OWNER_ID)) {1} ";
-            string sqlcntstr = string.Format("SELECT COUNT(*) FROM {0}", string.Format(sqlstr, actfilter, VisibleStr));
-            string sqlsearchstr = string.Format(sqlstr, actfilter, VisibleStr) + "  ORDER BY A.Activity_Date DESC";
+            if (!string.IsNullOrEmpty(txtFilter))
+            {
+                //filter = " (UPPER(GD.DESC2) LIKE '%' || :TXTFILTER || '%' OR  UPPER(GD.DESC1) LIKE '%' || :TXTFILTER || '%' OR UPPER(A.TOPIC) LIKE '%' || :TXTFILTER || '%' OR  UPPER(A.DESCR1) LIKE '%' || :TXTFILTER || '%' ) AND  ";
+                filter = " (UPPER(A.TOPIC) LIKE '%' || :TXTFILTER || '%' OR  UPPER(A.DESCR1) LIKE '%' || :TXTFILTER || '%'  OR  UPPER(A.DESCR2) LIKE '%' || :TXTFILTER || '%'  OR  UPPER(A.CREATEUSER) LIKE '%' || :TXTFILTER || '%' ) AND  ";
+                paramList.Add(":TXTFILTER", txtFilter.ToUpper());
+            }
+
+            string sqlstr = "SELECT DISTINCT GD.DESC3 AS ICON_EVENT ,A.*, (CASE WHEN :LANG <> :LOCAL THEN NVL(GD.DESC2,GD.DESC1) ELSE GD.DESC1 END ) AS EVENT_NAME FROM CRM_ACTIVITIES A LEFT OUTER JOIN CRM_ACTIVITIES_LINK AK ON A.A_ID = AK.A_ID LEFT OUTER JOIN GENERAL_DESC GD ON GD.GDTYPE = 'ACCAT' AND A.ACTIVITY_CAT = GD.GDCODE WHERE {0} {1} ((A.OWNER_CAT = :OWNER_CAT AND A.OWNER_ID = :OWNER_ID) OR (AK.CATEGORY = :OWNER_CAT AND AK.LINK_ID = :OWNER_ID)) AND {2} ";
+            string sqlcntstr = string.Format("SELECT COUNT(*) FROM ({0})", string.Format(sqlstr, filter, actfilter, VisibleStr));
+            string sqlsearchstr = string.Format(sqlstr, filter, actfilter, VisibleStr) + "  ORDER BY A.Activity_Date DESC";
 
             try
             {
                 ret.result.totalRec = (int)this.ExecuteScalar(sqlcntstr, paramList, null);
                 var dt = this.DoQuery(sqlsearchstr, paramList, null, (int)curpage, CRM_Controller.maxrows);
                 ret.result.TimeObjList = (List<MTimelineObj>)dt.GetDTOs<MTimelineObj>();
+                foreach (MTimelineObj t in ret.result.TimeObjList)
+                {
+                    t.ActivitiesDtStr = t.ActivityDate.Value.ToString(DateStringformatAsp);
+                    if (t.Priority != null && !string.IsNullOrEmpty(t.Priority))
+                    {
+                        switch (t.Priority)
+                        {
+                            case "1":
+                                t.PriorityStr = "!";
+                                break;
+                            case "2":
+                                t.PriorityStr = "!!";
+                                break;
+                            case "3":
+                                t.PriorityStr = "!!!";
+                                break;
+                        }
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -620,14 +738,62 @@ namespace CRM_Lib
         }
 
 
-        public GuResult<List<CrmActivitiesLink>> GetActivityLinkByOwner(string ownercd, Int64 ownerid, Int64 curpage)
+        public GuResult<List<MCrmActivitiesLink>> GetActivityLinkByOwner(string ownercd, Int64 ownerid, Int64 curpage, string lang)
         {
-            GuResult<List<CrmActivitiesLink>> ret = new GuResult<List<CrmActivitiesLink>>();
+            GuResult<List<MCrmActivitiesLink>> ret = new GuResult<List<MCrmActivitiesLink>>();
             try
-            { 
-                string sqlstr = "SELECT * FROM CRM_ACTIVITIES_LINK WHERE ACTIVITY_CAT = '" + ownercd + "' AND ACTIVITY_ID = " + ownerid + " ";
-                var dt = this.DoQuery(sqlstr, null, null, (int)curpage, CRM_Controller.maxrows);
-                ret.result = (List<CrmActivitiesLink>)dt.GetDTOs<CrmActivitiesLink>();
+            {
+                Dictionary<string, object> paramList = new Dictionary<string, object>();
+                paramList.Add("LANG", lang);
+                paramList.Add("LOCAL", CRM_Controller.DefaultLang);
+                string sqlstr = "SELECT L.*,(  CASE WHEN :LANG <> :LOCAL THEN NVL(GDL.DESC2,GDL.DESC1) ELSE GDL.DESC1 END) AS RELATE_NAME, GDL.DESC4 AS ICON_PIC, GDAC.DESC5 AS TB_NAME FROM CRM_ACTIVITIES_LINK L LEFT OUTER JOIN GENERAL_DESC GDL ON GDL.GDTYPE = 'ACTRT' AND L.RELATE_CD =  GDL.GDCODE LEFT OUTER JOIN GENERAL_DESC GDAC ON GDAC.GDTYPE = 'ACCAT' AND L.CATEGORY =  GDAC.GDCODE WHERE L.ACTIVITY_CAT = '" + ownercd + "' AND L.ACTIVITY_ID = " + ownerid + " ";
+                var dt = this.DoQuery(sqlstr, paramList, null, (int)curpage, CRM_Controller.maxrows);
+                ret.result = (List<MCrmActivitiesLink>)dt.GetDTOs<MCrmActivitiesLink>();
+
+                if (ret.result != null && ret.result.Count > 0)
+                {
+                    foreach (MCrmActivitiesLink l in ret.result)
+                    {
+                        string sqlstrName = "SELECT {0} FROM " + l.TbName + " WHERE A_ID = " + l.AId;
+                        string colstr = "";
+                        if (l.Category == "ACCATORG")
+                        {
+                            colstr = "(CASE WHEN '" + lang + "' <> '" + DefaultLang + "' THEN NVL(DESCR_OTH,DESCR_LOC) ELSE DESCR_LOC END) AS  LKNAME ";
+
+                        }
+                        else if (l.Category == "ACCATCONT")
+                        {
+                            colstr = "(CASE WHEN '" + lang + "' <> '" + DefaultLang + "' THEN NVL(NAME_OTH,NAME_LOC) ELSE NAME_LOC END) AS  LKNAME ";
+
+                        }
+                        else
+                        {
+                            colstr = "DESCR AS LKNAME ";
+                        }
+                        sqlstrName = string.Format(sqlstrName, colstr);
+
+                        Database database = GetDB();
+                        using (IDbConnection conn = database.CreateOpenConnection())
+                        {
+                            IDbCommand command = database.CreateCommand(sqlstrName, conn);
+
+                            object tmpName = command.ExecuteScalar();
+
+                            if (tmpName != null)
+                            {
+                                l.LinkName = (string)tmpName;
+                            }
+
+                            command.Dispose();
+                            conn.Close();
+                        };
+
+
+                    }
+
+                }
+
+
                 ret.IsComplete = true;
             }
             catch (Exception ex)

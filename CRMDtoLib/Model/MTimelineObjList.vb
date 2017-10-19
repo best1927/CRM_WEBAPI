@@ -24,6 +24,8 @@ Namespace Model
 
         <DataMember> Public Property IconEvent As String
         <DataMember> Public Property EventName As String
+        <DataMember> Public Property PriorityStr As String
+        <DataMember> Public Property ActivitiesDtStr As String
     End Class
 
 

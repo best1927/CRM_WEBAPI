@@ -11,9 +11,15 @@ Namespace Model
         Inherits DTO.CrmOrganization
 
 
+        <DataMember> Public Property OrgName As String
+        <DataMember> Public Property OrgTypeName As String
+        <DataMember> Public Property Phone As String
+
+        <DataMember> Public Property CreateDateStr As String
+
+        <DataMember> Public Property FullAddress As String
         <DataMember> Public Property OrgAnniversarylst As List(Of DTO.CrmOrganizationAnniversary)
-        <DataMember> Public Property OrgLinklst As List(Of DTO.CrmActivitiesLink)
-        <DataMember> Public Property OrgSociallst As List(Of DTO.CrmOrganizationSocial)
+        <DataMember> Public Property OrgLinklst As List(Of Model.MCrmActivitiesLink)
 
 
 

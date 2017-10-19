@@ -110,30 +110,30 @@ Private _Createuser As String
 			End Set
 		End Property
 
-Private _Schedule As String
-		<DataMember(),DataField("SCHEDULE")> _
-		Public Property Schedule() As String
+Private _RepeatYearYn As String
+		<DataMember(),DataField("REPEAT_YEAR_YN")> _
+		Public Property RepeatYearYn() As String
 			Get
-				Return Me._Schedule
+				Return Me._RepeatYearYn
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.Schedule, value) <> true) Then				    
-						Me._Schedule = value
-						OnPropertyChanged("Schedule")
+					If (Object.ReferenceEquals(Me.RepeatYearYn, value) <> true) Then				    
+						Me._RepeatYearYn = value
+						OnPropertyChanged("RepeatYearYn")
 				    End If 
 			End Set
 		End Property
 
-Private _NotifyYn As String
-		<DataMember(),DataField("NOTIFY_YN")> _
-		Public Property NotifyYn() As String
+Private _ReminderYn As String
+		<DataMember(),DataField("REMINDER_YN")> _
+		Public Property ReminderYn() As String
 			Get
-				Return Me._NotifyYn
+				Return Me._ReminderYn
 			End Get
 			Set(ByVal value As String)
-					If (Object.ReferenceEquals(Me.NotifyYn, value) <> true) Then				    
-						Me._NotifyYn = value
-						OnPropertyChanged("NotifyYn")
+					If (Object.ReferenceEquals(Me.ReminderYn, value) <> true) Then				    
+						Me._ReminderYn = value
+						OnPropertyChanged("ReminderYn")
 				    End If 
 			End Set
 		End Property

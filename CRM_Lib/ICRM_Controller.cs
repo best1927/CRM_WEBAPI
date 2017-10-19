@@ -22,7 +22,8 @@ namespace CRM_Lib
 
         string convertDatetostring(System.DateTime pDate, string DateFormat);
 
-        GuResult<List<MGeneralType>> GetGdList(String GdList);
+        GuResult<List<MGeneralType>> GetGdList(string lang, string GdList);
+        GuResult<List<MLookupObj>> GetSubGdList(string MGdCode, string lang);
 
         List<MasErrorMessage> GetMessageList(string lang);
 
@@ -31,9 +32,9 @@ namespace CRM_Lib
 
         GuResult<List<CrmActivitiesTag>> GetTagList(string activity, string alias, string userid);
         #region "Find ActivitiesList"
-        GuResult<MTimelineObjList> GetActivityByOwner(string ownercd, Int64 ownerid, string userid, Int64 curpage, string activitiescd = "");
+        GuResult<MTimelineObjList> GetActivityByOwner(string ownercd, Int64 ownerid, string userid, Int64 curpage, string lang, string txtFilter , string activitiescd = "");
 
-        GuResult<List<CrmActivitiesLink>> GetActivityLinkByOwner(string ownercd, Int64 ownerid, Int64 curpage);
+        GuResult<List<MCrmActivitiesLink>> GetActivityLinkByOwner(string ownercd, Int64 ownerid, Int64 curpage, string lang);
         #endregion
         #endregion
 

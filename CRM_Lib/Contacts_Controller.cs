@@ -181,18 +181,17 @@ namespace CRM_Lib
         }
 
 
-        public GuResult<MCrmContacts> Contact_FindByCode(Int64 ContactId)
+        public GuResult<MCrmContacts> Contact_FindByCode(Int64 ContactId,string lang)
         {
 
             CRM_Controller crmlib = new CRM_Controller();
             GuResult<MCrmContacts> ret = new GuResult<MCrmContacts>();
-            ret.result.ConLinklst = new List<CrmActivitiesLink>();
-            ret.result.ConSociallst = new List<CrmContactsSocial >();
+            ret.result = new MCrmContacts();
+            ret.result.ConLinklst = new List<MCrmActivitiesLink >(); 
             ret.result.ConAnniversarylst  = new List<CrmContactsAnniversary >();
             ret.result.ConRelatelst  = new List<CrmContactsRelative >();
 
-            string sqlStrg = " SELECT * FROM CRM_CONTACTS WHERE CONTACT_ID = " + (int)ContactId;
-            string sqlStrSocial = "SELECT * FROM CRM_CONTACTS_SOCIAL WHERE CONTACT_ID = " + (int)ContactId + " ORDER BY SEQ ";
+            string sqlStrg = " SELECT * FROM CRM_CONTACTS WHERE CONTACT_ID = " + (int)ContactId; 
             string sqlStrAnn = "SELECT * FROM CRM_CONTACTS_ANNIVERSARY WHERE CONTACT_ID = " + (int)ContactId + " ORDER BY ANNI_DT ";
             string sqlStrRelate = "SELECT * FROM CRM_CONTACTS_RELATIVE WHERE CONTACT_ID = " + (int)ContactId + " ORDER BY SEQ ";
             try
@@ -202,9 +201,8 @@ namespace CRM_Lib
                 if (tmp != null && tmp.Count > 0)
                 {
                     ret.result = tmp[0];
-                    ret.result.ConLinklst = crmlib.GetActivityLinkByOwner(ret.result.ActivityCat, (long)ret.result.ContactId , 0).result;
-                    var dt2 = crmlib.DoQuery(sqlStrSocial, null, null, 0, CRM_Controller.maxrows);
-                    ret.result.ConSociallst = (List<CrmContactsSocial>)dt2.GetDTOs<CrmContactsSocial>();
+                    ret.result.ConLinklst = crmlib.GetActivityLinkByOwner(ret.result.ActivityCat, (long)ret.result.ContactId , 0,lang).result;
+                   
                     var dt3 = crmlib.DoQuery(sqlStrAnn, null, null, 0, CRM_Controller.maxrows);
                     ret.result.ConAnniversarylst = (List<CrmContactsAnniversary>)dt3.GetDTOs<CrmContactsAnniversary>();
                     var dt4 = crmlib.DoQuery(sqlStrRelate, null, null, 0, CRM_Controller.maxrows);
@@ -389,23 +387,7 @@ namespace CRM_Lib
                     }
 
 
-                    //Insert CRM_CONTACTS_Social 
-                    if (Obj.ConSociallst != null && Obj.ConSociallst.Count > 0)
-                    {
-                        seqSocial = 0;
-                        foreach (CrmContactsSocial c in Obj.ConSociallst)
-                        {
-                            seqSocial += 1;
-                            c.ContactId = Obj.ContactId;
-                            c.Seq = seqSocial;
-                            c.Createuser = userid;
-                            c.Createdate = _d;
-                            cmdSocial = c.InsertCommand(conn);
-                            cmdSocial.Transaction = trn;
-                            cmdSocial.ExecuteNonQuery();
-                        }
-                    }
-
+                    
 
                     trn.Commit();
                     cmd.Dispose();
@@ -440,13 +422,11 @@ namespace CRM_Lib
             sb.Append("select SEQ_CRM_CONTACTS.nextval from dual");
             IDbCommand cmd = null;
             IDbCommand cmdAnn = null;
-            IDbCommand cmdRelate = null;
-            IDbCommand cmdSocial = null;
+            IDbCommand cmdRelate = null; 
             IDbCommand cmdLink = null;
             IDbTransaction trn = null;
 
-            int seqAnn = 0;
-            int seqSocial = 0;
+            int seqAnn = 0; 
             int seqLink = 0;
 
 
@@ -557,41 +537,11 @@ namespace CRM_Lib
                         }
                     }
 
-
-                    //Insert CRM_CONTACTS_Social 
-                    if (Obj.ConSociallst != null && Obj.ConSociallst.Count > 0)
-                    {
-                        seqSocial = GetMaxSocialSeqId(conn, (int)Obj.ContactId);
-                        foreach (CrmContactsSocial  d in Obj.ConSociallst)
-                        {
-                            if (d.EntityState == SsCommon.EntityStateLocal.Added)
-                            {
-                                seqSocial += 1;
-                                d.Seq = seqSocial;
-                                d.Createuser = userid;
-                                d.Createdate = DateTime.Now;
-                                cmdSocial = d.InsertCommand(conn);
-                            }
-                            else if (d.EntityState == SsCommon.EntityStateLocal.Modified)
-                            {
-                                d.Modifyuser = userid;
-                                d.Modifydate = DateTime.Now;
-                                cmdSocial = d.UpdateCommand(conn, "Createuser,Createdate");
-                            }
-                            else if (d.EntityState == SsCommon.EntityStateLocal.Deleted)
-                            {
-
-                                cmdSocial = d.DeleteCommand(conn);
-                            }
-                            cmdSocial.Transaction = trn;
-                            cmdSocial.ExecuteNonQuery();
-                        }
-                    }
+ 
                     trn.Commit();
                     cmd.Dispose();
                     cmdAnn.Dispose();
-                    cmdRelate.Dispose();
-                    cmdSocial.Dispose();
+                    cmdRelate.Dispose(); 
                     cmdLink.Dispose(); 
                     conn.Close();
                     ret.IsComplete = true;
