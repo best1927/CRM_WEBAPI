@@ -13,11 +13,15 @@ using System.Web;
 using SessionFactory;
 using System.Configuration;
 
+using System.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 [ServiceContract(Namespace = "")]
 [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
 public class AuthenService
 {
+
 
     [OperationContract]
     [WebInvoke(ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest, Method = "GET")]

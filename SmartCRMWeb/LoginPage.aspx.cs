@@ -5,6 +5,7 @@ using System.DirectoryServices;
 using SessionFactory;
 using Authen_Lib;
 using System.Web.Http;
+using AuthModels;
 public partial class LoginPage : System.Web.UI.Page
 {
     private readonly string _ldapService = ConfigurationManager.AppSettings["LDAPService"];
@@ -16,7 +17,8 @@ public partial class LoginPage : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-       
+        DistributorValidator t = new DistributorValidator();
+        var tp = t.GetType();
         lblErrorMessage.Visible = false;
         //Page.Title = @"SsF2F";
         txtUserId.Focus();

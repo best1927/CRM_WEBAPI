@@ -19,6 +19,7 @@
             HttpContext.Current.Response.AddHeader("Access-Control-Max-Age", "1728000");
             HttpContext.Current.Response.End();
         }
+        //Get AccessToken
     }
 
     void Application_End(object sender, EventArgs e)

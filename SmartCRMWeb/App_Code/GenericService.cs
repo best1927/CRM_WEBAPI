@@ -87,7 +87,18 @@ public class GenericService
        
     }
 
-  
+    [OperationContract]
+    //[WebInvoke(Method = "POST" ,   RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+    //  [WebInvoke(Method = "POST", UriTemplate = "TestMsg?Name={Name}", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+    [WebInvoke(ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, Method = "POST", UriTemplate = "/TestPost")]
+    public String TestPost(string param)
+    {
+        string ret = "Hello " + param;
+        return JsonConvert.SerializeObject(ret);
+      
+    }
+
+
 
     //[OperationContract]
     //  public String GetMySession()
@@ -103,7 +114,7 @@ public class GenericService
     //      }
     //  }
 
-     
+
 
 }
 
